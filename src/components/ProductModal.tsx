@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ShoppingBag, Check, Ruler, Sparkles, ChevronDown } from 'lucide-react';
+import { X, ShoppingBag, Check, Ruler, Sparkles, ChevronDown, Heart } from 'lucide-react';
 import { Product } from '../types';
 
 interface ProductModalProps {
@@ -7,6 +7,8 @@ interface ProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: (product: Product, size: string, color: string, quantity: number) => void;
+  isWishlisted?: boolean;
+  onToggleWishlist?: (product: Product, e: React.MouseEvent) => void;
 }
 
 export const ProductModal: React.FC<ProductModalProps> = ({
@@ -14,6 +16,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   isOpen,
   onClose,
   onAddToCart,
+  isWishlisted,
+  onToggleWishlist,
 }) => {
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
@@ -61,21 +65,42 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#2A2421]/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-[#2A2421]/60 backdrop-blur-sm animate-fade-in select-none">
       {/* Backdrop overlay */}
       <div className="fixed inset-0" onClick={onClose}></div>
 
       {/* Modal Card */}
       <div className="bg-[#FFFFFF] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[92vh] overflow-y-auto z-10 border border-[#E8DFD5] flex flex-col md:flex-row relative">
         
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 left-4 z-20 w-8 h-8 rounded-full bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] flex items-center justify-center hover:bg-[#E8DFD5] transition-colors"
-          aria-label="بستن پنجره"
-        >
-          <X className="w-4 h-4" />
-        </button>
+        {/* Top Actions: Close & Wishlist */}
+        <div className="absolute top-4 left-4 z-20 flex items-center gap-2">
+          {onToggleWishlist && (
+            <button
+              onClick={(e) => onToggleWishlist(product, e)}
+              className={`w-8 h-8 rounded-full border border-[#E8DFD5] flex items-center justify-center transition-colors ${
+                isWishlisted
+                  ? 'bg-[#FAF6F0] text-[#A08875] shadow-xs'
+                  : 'bg-[#FFFFFF] text-[#2A2421] hover:bg-[#FAF6F0]'
+              }`}
+              title={isWishlisted ? 'حذف از برگزیده‌ها' : 'افزودن به برگزیده‌ها'}
+              aria-label="افزودن به برگزیده‌ها"
+            >
+              <Heart
+                className={`w-4 h-4 transition-transform active:scale-125 ${
+                  isWishlisted ? 'fill-[#A08875] text-[#A08875]' : ''
+                }`}
+              />
+            </button>
+          )}
+
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] flex items-center justify-center hover:bg-[#E8DFD5] transition-colors"
+            aria-label="بستن پنجره"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
 
         {/* Gallery Column */}
         <div className="md:w-1/2 p-4 sm:p-6 flex flex-col items-center justify-between bg-[#FAF6F0]/50 border-b md:border-b-0 md:border-l border-[#E8DFD5]">
@@ -98,7 +123,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(img)}
-                  className={`w-14 h-18 rounded-lg overflow-hidden border-2 transition-all shrink-0 ${
+                  className={`w-14 h-18 rounded-lg overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
                     selectedImage === img ? 'border-[#2A2421] shadow-md scale-105' : 'border-[#E8DFD5] opacity-70 hover:opacity-100'
                   }`}
                 >
@@ -137,49 +162,31 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             </div>
 
             {/* Description */}
-            <p className="text-xs sm:text-sm text-[#5A504B] leading-relaxed">
+            <p className="text-xs sm:text-[13px] text-[#5A504B] leading-relaxed">
               {product.description}
             </p>
 
-            {/* Color Swatch Picker */}
-            <div className="space-y-2 pt-1">
-              <div className="flex items-center justify-between text-xs text-[#786C65]">
-                <span>انتخاب رنگ پارچه:</span>
-                <span className="font-medium text-[#2A2421]">{selectedColor}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                {product.colors.map((color) => (
-                  <button
-                    key={color.name}
-                    onClick={() => setSelectedColor(color.name)}
-                    className={`group relative p-0.5 rounded-full transition-all ${
-                      selectedColor === color.name
-                        ? 'ring-2 ring-[#2A2421] scale-110'
-                        : 'hover:scale-105'
-                    }`}
-                    title={color.name}
-                  >
-                    <span
-                      className={`block w-6 h-6 rounded-full shadow-sm ${
-                        color.border ? 'border border-[#D4C5B9]' : ''
-                      }`}
-                      style={{ backgroundColor: color.hex }}
-                    ></span>
-                  </button>
-                ))}
+            {/* Origin & Atelier Badge */}
+            <div className="p-3 bg-[#FAF6F0] rounded-xl border border-[#E8DFD5] flex items-center gap-2.5">
+              <Sparkles className="w-4 h-4 text-[#A08875] shrink-0" />
+              <div className="text-[11px] text-[#786C65]">
+                <strong className="text-[#2A2421] font-medium">خاستگاه الیاف: </strong>
+                {product.origin}
               </div>
             </div>
 
             {/* Size Selector */}
-            <div className="space-y-2 pt-1">
-              <div className="flex items-center justify-between text-xs text-[#786C65]">
-                <span>انتخاب سایز مزونی:</span>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-[#2A2421]">
+                  سایز تن‌پوش: <span className="text-[#A08875]">{selectedSize}</span>
+                </label>
                 <button
                   onClick={() => setIsSizeGuideOpen(!isSizeGuideOpen)}
-                  className="flex items-center gap-1 text-[#A08875] hover:text-[#2A2421] text-xs underline decoration-dotted transition-colors"
+                  className="flex items-center gap-1 text-[11px] text-[#786C65] hover:text-[#2A2421] transition-colors cursor-pointer"
                 >
-                  <Ruler className="w-3 h-3" />
-                  <span>راهنمای سایز مزون</span>
+                  <Ruler className="w-3.5 h-3.5" />
+                  <span>راهنمای سایز مزونی</span>
                 </button>
               </div>
 
@@ -188,93 +195,84 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                   <button
                     key={sz}
                     onClick={() => setSelectedSize(sz)}
-                    className={`flex-1 py-2 px-3 rounded-full text-xs font-medium transition-all ${
+                    className={`flex-1 py-2 rounded-xl text-xs font-medium border transition-all cursor-pointer ${
                       selectedSize === sz
-                        ? 'bg-[#2A2421] text-[#FAF6F0] shadow-sm scale-102'
-                        : 'bg-[#FAF6F0] text-[#5A504B] hover:bg-[#E8DFD5] border border-[#E8DFD5]'
+                        ? 'bg-[#2A2421] text-white border-[#2A2421] shadow-xs'
+                        : 'bg-white text-[#2A2421] border-[#E8DFD5] hover:border-[#2A2421]'
                     }`}
                   >
                     {sz}
                   </button>
                 ))}
               </div>
+
+              {/* Accordion Size Guide */}
+              {isSizeGuideOpen && (
+                <div className="p-3.5 bg-[#FAF6F0] rounded-xl border border-[#E8DFD5] text-[11px] text-[#786C65] space-y-1.5 animate-fade-in">
+                  <div className="font-semibold text-[#2A2421]">جدول استاندارد آتلیه ولا:</div>
+                  <div className="grid grid-cols-3 gap-2 text-center pt-1">
+                    <div className="bg-white p-1.5 rounded-lg border border-[#E8DFD5]">۳۶: دور سینه ۸۴-۸۸</div>
+                    <div className="bg-white p-1.5 rounded-lg border border-[#E8DFD5]">۳۸: دور سینه ۸۸-۹۲</div>
+                    <div className="bg-white p-1.5 rounded-lg border border-[#E8DFD5]">۴۰: دور سینه ۹۲-۹۶</div>
+                  </div>
+                  <div className="text-[10px] text-[#A08875] pt-1">
+                    ✦ امکان شخصی‌دوزی بر اساس اندازه‌های ارسالی در تلگرام فراهم است.
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Collapsible Size Guide Table */}
-            {isSizeGuideOpen && (
-              <div className="p-3 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] text-xs space-y-1.5 animate-fade-in">
-                <div className="flex items-center justify-between font-bold text-[#2A2421] border-b border-[#E8DFD5] pb-1">
-                  <span>جدول استاندارد آتلیه ولا (سانتی‌متر)</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-[#A08875]" />
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-[#5A504B] text-[11px] pt-1">
-                  <div>• سایز ۳۶: دور سینه ۸۴ / دور کمر ۶۶</div>
-                  <div>• سایز ۳۸: دور سینه ۸۸ / دور کمر ۷۰</div>
-                  <div>• سایز ۴۰: دور سینه ۹۲ / دور کمر ۷۴</div>
-                  <div>• سایز ۴۲: دور سینه ۹۶ / دور کمر ۷۸</div>
-                </div>
-                <p className="text-[10px] text-[#A08875] pt-1">
-                  * امکان دوخت سفارشی با اندازه‌های دقیق شما از طریق پشتیبانی تلگرام وجود دارد.
-                </p>
+            {/* Color Selector */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-[#2A2421]">
+                رنگ پارچه: <span className="text-[#A08875]">{selectedColor}</span>
+              </label>
+              <div className="flex items-center gap-2">
+                {product.colors.map((c) => (
+                  <button
+                    key={c.name}
+                    onClick={() => setSelectedColor(c.name)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs border transition-all cursor-pointer ${
+                      selectedColor === c.name
+                        ? 'bg-[#2A2421] text-white border-[#2A2421] shadow-xs'
+                        : 'bg-white text-[#2A2421] border-[#E8DFD5] hover:border-[#2A2421]'
+                    }`}
+                  >
+                    <span
+                      className="w-3.5 h-3.5 rounded-full border border-black/10 shrink-0"
+                      style={{ backgroundColor: c.hex }}
+                    ></span>
+                    <span>{c.name}</span>
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
-            {/* Key Features bullet points */}
-            {product.features && product.features.length > 0 && (
-              <div className="pt-1">
-                <ul className="grid grid-cols-1 gap-1 text-xs text-[#5A504B]">
-                  {product.features.map((feat, idx) => (
-                    <li key={idx} className="flex items-center gap-1.5">
-                      <Sparkles className="w-3 h-3 text-[#A08875] shrink-0" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            {/* Features Checklist */}
+            <div className="space-y-1.5 pt-2 border-t border-[#E8DFD5]/60">
+              {product.features.slice(0, 3).map((feat, idx) => (
+                <div key={idx} className="flex items-center gap-2 text-[11.5px] text-[#786C65]">
+                  <Check className="w-3.5 h-3.5 text-[#A08875] shrink-0" />
+                  <span>{feat}</span>
+                </div>
+              ))}
+            </div>
 
           </div>
 
-          {/* Action Row */}
-          <div className="pt-3 border-t border-[#E8DFD5] flex items-center gap-3">
-            {/* Quantity Selector */}
-            <div className="flex items-center bg-[#FAF6F0] border border-[#E8DFD5] rounded-full px-2 py-1">
-              <button
-                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-7 h-7 flex items-center justify-center text-[#2A2421] font-bold text-sm hover:bg-[#E8DFD5] rounded-full transition-colors"
-                aria-label="کاهش تعداد"
-              >
-                -
-              </button>
-              <span className="w-8 text-center text-xs font-bold text-[#2A2421]">
-                {quantity}
-              </span>
-              <button
-                onClick={() => setQuantity((q) => q + 1)}
-                className="w-7 h-7 flex items-center justify-center text-[#2A2421] font-bold text-sm hover:bg-[#E8DFD5] rounded-full transition-colors"
-                aria-label="افزایش تعداد"
-              >
-                +
-              </button>
-            </div>
-
-            {/* Add to Cart CTA */}
+          {/* Add to Cart CTA */}
+          <div className="pt-3 border-t border-[#E8DFD5]">
             <button
               onClick={handleAdd}
               disabled={isAddedAnimation}
-              className="flex-1 py-3.5 px-6 rounded-full bg-[#2A2421] text-[#FAF6F0] hover:bg-[#140F0D] transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 text-xs sm:text-sm font-medium"
+              className={`w-full py-3.5 px-6 rounded-full flex items-center justify-center gap-2 text-xs sm:text-sm font-medium transition-all shadow-md cursor-pointer ${
+                isAddedAnimation
+                  ? 'bg-emerald-700 text-white scale-98'
+                  : 'bg-[#2A2421] text-[#FAF6F0] hover:bg-[#140F0D] active:scale-95'
+              }`}
             >
-              {isAddedAnimation ? (
-                <>
-                  <Check className="w-4 h-4 text-emerald-300" />
-                  <span>به سبد افزوده شد</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="w-4 h-4 text-[#D4C5B9]" />
-                  <span>افزودن به سبد خرید مزون</span>
-                </>
-              )}
+              <ShoppingBag className="w-4 h-4 text-[#D4C5B9]" />
+              <span>{isAddedAnimation ? 'به سبد خرید افزوده شد...' : 'افزودن قطعه به سبد خرید'}</span>
             </button>
           </div>
 

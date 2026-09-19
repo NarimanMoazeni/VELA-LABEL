@@ -5,7 +5,8 @@ import { Product } from '../types';
 interface WishlistModalProps {
   isOpen: boolean;
   onClose: () => void;
-  wishlist: Product[];
+  items?: Product[];
+  wishlist?: Product[];
   onRemoveFromWishlist: (product: Product) => void;
   onAddToCart: (product: Product) => void;
 }
@@ -13,11 +14,14 @@ interface WishlistModalProps {
 export const WishlistModal: React.FC<WishlistModalProps> = ({
   isOpen,
   onClose,
+  items,
   wishlist,
   onRemoveFromWishlist,
   onAddToCart,
 }) => {
   if (!isOpen) return null;
+
+  const activeItems = items || wishlist || [];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2A2421]/60 backdrop-blur-sm animate-fade-in">
@@ -29,7 +33,7 @@ export const WishlistModal: React.FC<WishlistModalProps> = ({
           <div className="flex items-center gap-2">
             <Heart className="w-4 h-4 text-[#A08875] fill-[#A08875]" />
             <h3 className="font-display text-base sm:text-lg text-[#2A2421] font-semibold">
-              لیست علاقه‌مندی‌ها و برگزیده‌های شما
+              لیست برگزیده‌ها و منتخب‌های شما
             </h3>
           </div>
           <button
@@ -42,13 +46,13 @@ export const WishlistModal: React.FC<WishlistModalProps> = ({
 
         {/* Content */}
         <div className="p-5 overflow-y-auto flex-1 space-y-3">
-          {wishlist.length === 0 ? (
+          {activeItems.length === 0 ? (
             <div className="text-center py-12 space-y-2">
               <Heart className="w-10 h-10 text-[#D4C5B9] mx-auto" />
-              <p className="text-xs text-[#786C65]">هنوز کالایی به لیست برگزیده‌ها اضافه نکرده‌اید.</p>
+              <p className="text-xs text-[#786C65]">هنوز قطعه‌ای به لیست برگزیده‌های خود اضافه نکرده‌اید.</p>
             </div>
           ) : (
-            wishlist.map((item) => (
+            activeItems.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] gap-3"
