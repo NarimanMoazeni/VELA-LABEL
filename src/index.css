@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* High-Quality Persian Fonts Import (Yekan Bakh & Dana Webfonts CDN with Vazirmatn Fallback) */
+/* High-Quality Persian Fonts Import (Yekan Bakh & Vazirmatn Clean Webfonts) */
 @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css');
 
 @font-face {
@@ -11,18 +11,18 @@
 }
 
 @font-face {
-  font-family: 'Dana';
+  font-family: 'Yekan Bakh';
   src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Bold.woff2') format('woff2');
   font-weight: 700;
   font-display: swap;
 }
 
 @theme {
-  --font-sans: "Yekan Bakh", "YekanBakh", "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Dana", "Yekan Bakh", "Vazirmatn", sans-serif;
-  --font-brand: "Italiana", "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-sans: "Yekan Bakh", "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Yekan Bakh", "Vazirmatn", sans-serif;
+  --font-brand: "Italiana", "Cormorant Garamond", Georgia, serif;
   --font-serif: "Italiana", "Cormorant Garamond", serif;
-  --font-accent: "Playfair Display", "Italiana", "Dana", cursive;
+  --font-accent: "Italiana", "Cormorant Garamond", serif;
 
   --color-canvas: #F5F0EB;
   --color-surface: #FAF6F0;
@@ -82,7 +82,7 @@
 /* Luxury Card Hover Gradient */
 .luxury-card-gradient {
   background: #FFFFFF;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .luxury-card-gradient:hover {
@@ -90,4 +90,51 @@
   border-color: rgba(160, 136, 117, 0.45);
   box-shadow: 0 16px 36px -12px rgba(42, 36, 33, 0.08);
   transform: translateY(-3px);
+}
+
+/* Skeleton Loading Shimmer Effect */
+@keyframes luxuryShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #EDE6DE 0%,
+    #F8F3ED 50%,
+    #EDE6DE 100%
+  );
+  background-size: 200% 100%;
+  animation: luxuryShimmer 1.8s ease-in-out infinite;
+}
+
+/* Stagger Entrance Animation */
+@keyframes staggerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-item {
+  animation: staggerFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cross-fade Micro-interactions */
+.crossfade-icon {
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Skip-Delay Instant Feel for Buttons */
+.skip-delay {
+  transition-duration: 120ms !important;
 }
