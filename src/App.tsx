@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { EditorialCategories } from './components/EditorialCategories';
+import { FeaturedCollection } from './components/FeaturedCollection';
 import { ProductCard } from './components/ProductCard';
 import { ProductSkeleton } from './components/ProductSkeleton';
 import { ProductModal } from './components/ProductModal';
@@ -62,6 +64,7 @@ export default function App() {
       fullName: '',
       phone: '',
       address: '',
+      postalCode: '',
     };
   });
 
@@ -114,7 +117,7 @@ export default function App() {
     setToasts((prev) => [...prev, { id, message }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 3200);
+    }, 3000);
   };
 
   const handleDismissToast = (id: number) => {
@@ -125,7 +128,7 @@ export default function App() {
   const handleCategorySelect = (cat: string) => {
     setIsCategoryLoading(true);
     setSelectedCategory(cat);
-    setTimeout(() => setIsCategoryLoading(false), 260);
+    setTimeout(() => setIsCategoryLoading(false), 240);
     handleScrollToCatalog();
   };
 
@@ -246,7 +249,7 @@ export default function App() {
 
   // Scroll to catalog section
   const handleScrollToCatalog = () => {
-    const el = document.getElementById('catalog-grid');
+    const el = document.getElementById('catalog-filter-bar');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
@@ -255,7 +258,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F0EB] text-[#2A2421] selection:bg-[#E8DFD5] selection:text-[#2A2421]">
       
-      {/* 1. Balanced Luxury Header */}
+      {/* 1. Compact Editorial Header */}
       <Header
         cartCount={cartTotalCount}
         wishlistCount={wishlist.length}
@@ -268,16 +271,29 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 pt-24 md:pt-32">
+      <main className="flex-1 pt-20 sm:pt-22">
         
-        {/* 2. Hero Editorial Section with Morph Lookbook Slider */}
+        {/* 2. Tighter Editorial Hero Section */}
         <Hero
           onExploreClick={handleScrollToCatalog}
           onOpenQuickView={handleOpenModal}
           featuredProducts={PRODUCTS.slice(0, 3)}
         />
 
-        {/* 3. Dedicated Luxury Category Filter & Sorting Bar */}
+        {/* 3. Below Hero: Editorial Category Tiles (3 cards) */}
+        <EditorialCategories onSelectCategory={handleCategorySelect} />
+
+        {/* 4. Editorial Featured Collection (1 dominant + 3 supporting) */}
+        <FeaturedCollection
+          products={PRODUCTS}
+          onOpenModal={handleOpenModal}
+          onQuickAdd={handleQuickAdd}
+          wishlist={wishlist}
+          onToggleWishlist={handleToggleWishlist}
+          onViewAllClick={handleScrollToCatalog}
+        />
+
+        {/* 5. Sticky Category Filter Bar */}
         <CategoryFilterBar
           selectedCategory={selectedCategory}
           onSelectCategory={handleCategorySelect}
@@ -287,21 +303,21 @@ export default function App() {
           onSortChange={setSortBy}
         />
 
-        {/* 4. Product Catalog Grid with Stagger & Skeleton Loading */}
+        {/* 6. Main Product Catalog Grid */}
         <section
           id="catalog-grid"
-          className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-10 sm:py-16"
+          className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 sm:py-12"
         >
           {isCategoryLoading ? (
             /* Skeleton Loading Grid */
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {Array.from({ length: 4 }).map((_, i) => (
                 <ProductSkeleton key={i} />
               ))}
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="text-center py-20 bg-[#FAF6F0] rounded-2xl border border-[#E8DFD5] space-y-3">
-              <p className="font-display text-lg text-[#2A2421]">
+            <div className="text-center py-16 bg-[#FAF6F0] rounded-xl border border-[#E8DFD5] space-y-3">
+              <p className="font-display text-base sm:text-lg text-[#2A2421]">
                 هیچ محصولی با مشخصات جستجوی شما یافت نشد.
               </p>
               <button
@@ -315,7 +331,7 @@ export default function App() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {filteredProducts.map((product, idx) => (
                 <ProductCard
                   key={product.id}
@@ -331,18 +347,18 @@ export default function App() {
           )}
         </section>
 
-        {/* 5. Atelier Materials & Philosophy with Hover Gradient Glow */}
+        {/* 7. Atelier Materials & Philosophy */}
         <AtelierPhilosophy />
 
-        {/* 6. Bespoke Tailoring Consultation Banner */}
+        {/* 8. Bespoke Consultation Banner */}
         <BespokeBanner onOpenCart={() => setIsCartOpen(true)} />
 
       </main>
 
-      {/* 7. Footer Component */}
+      {/* 9. Minimalist Footer */}
       <Footer onSelectCategory={handleCategorySelect} />
 
-      {/* Slide-over Cart Drawer */}
+      {/* Clean Linear Checkout Drawer (01-04) */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -355,7 +371,7 @@ export default function App() {
         onShowToast={showToast}
       />
 
-      {/* Product Quick-View / Size Selector Modal */}
+      {/* Product Modal */}
       {activeModalProduct && (
         <ProductModal
           isOpen={isModalOpen}
