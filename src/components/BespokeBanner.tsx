@@ -1,7 +1,11 @@
 import React from 'react';
 import { Send, Clock, Sparkles } from 'lucide-react';
 
-export const BespokeBanner: React.FC = () => {
+interface BespokeBannerProps {
+  onOpenCart?: () => void;
+}
+
+export const BespokeBanner: React.FC<BespokeBannerProps> = ({ onOpenCart }) => {
   return (
     <section id="bespoke-appointment" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-12 sm:py-16">
       <div className="bg-[#2A2421] text-[#FAF6F0] rounded-2xl p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-2xl border border-[#A08875]/20">

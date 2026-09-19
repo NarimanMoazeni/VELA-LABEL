@@ -2,12 +2,12 @@ import React from 'react';
 import { Send } from 'lucide-react';
 
 interface FooterProps {
-  onSelectCategory: (category: string) => void;
+  onSelectCategory?: (category: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
   return (
-    <footer className="w-full bg-[#FAF6F0] border-t border-[#E8DFD5] pt-14 pb-10 text-[#5A504B]">
+    <footer className="w-full bg-[#FAF6F0] border-t border-[#E8DFD5] pt-14 pb-10 text-[#5A504B] select-none">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {/* Main 4-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 mb-12">
@@ -36,32 +36,32 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
             <ul className="space-y-2 text-xs text-[#786C65]">
               <li>
                 <button
-                  onClick={() => onSelectCategory('coat')}
-                  className="hover:text-[#2A2421] transition-colors"
+                  onClick={() => onSelectCategory && onSelectCategory('coat')}
+                  className="hover:text-[#2A2421] transition-colors cursor-pointer"
                 >
-                  کالکشن پاییز و زمستان
+                  کالکشن پالتو و بارانی
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => onSelectCategory('blazer')}
-                  className="hover:text-[#2A2421] transition-colors"
+                  onClick={() => onSelectCategory && onSelectCategory('blazer')}
+                  className="hover:text-[#2A2421] transition-colors cursor-pointer"
                 >
                   کت و بلیزر دست‌دوز
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => onSelectCategory('silk')}
-                  className="hover:text-[#2A2421] transition-colors"
+                  onClick={() => onSelectCategory && onSelectCategory('silk')}
+                  className="hover:text-[#2A2421] transition-colors cursor-pointer"
                 >
-                  شومیز و پیراهن‌های ابریشم
+                  شومیز و تاپ‌های ابریشم
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => onSelectCategory('trousers')}
-                  className="hover:text-[#2A2421] transition-colors"
+                  onClick={() => onSelectCategory && onSelectCategory('trousers')}
+                  className="hover:text-[#2A2421] transition-colors cursor-pointer"
                 >
                   شلوار و استایل مونوکروم
                 </button>
