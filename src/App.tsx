@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { ProductCard } from './components/ProductCard';
+import { ProductSkeleton } from './components/ProductSkeleton';
 import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
 import { CategoryFilterBar } from './components/CategoryFilterBar';
@@ -18,6 +19,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('featured');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isCategoryLoading, setIsCategoryLoading] = useState<boolean>(false);
 
   // Modals and Drawers
   const [activeModalProduct, setActiveModalProduct] = useState<Product | null>(null);
@@ -119,6 +121,14 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
+  // Category change with luxury skeleton loading & smooth scroll
+  const handleCategorySelect = (cat: string) => {
+    setIsCategoryLoading(true);
+    setSelectedCategory(cat);
+    setTimeout(() => setIsCategoryLoading(false), 260);
+    handleScrollToCatalog();
+  };
+
   // Cart operations
   const handleAddToCart = (
     product: Product,
@@ -138,7 +148,8 @@ export default function App() {
       }
       return [
         ...prev,
-        {\n          id: compositeId,
+        {
+          id: compositeId,
           product,
           size,
           color,
@@ -244,17 +255,14 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F0EB] text-[#2A2421] selection:bg-[#E8DFD5] selection:text-[#2A2421]">
       
-      {/* 1. Balanced Luxury Header with Real VELA Logo */}
+      {/* 1. Balanced Luxury Header */}
       <Header
         cartCount={cartTotalCount}
         wishlistCount={wishlist.length}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenWishlist={() => setIsWishlistOpen(true)}
         activeCategory={selectedCategory}
-        onSelectCategory={(cat) => {
-          setSelectedCategory(cat);
-          handleScrollToCatalog();
-        }}
+        onSelectCategory={handleCategorySelect}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
@@ -262,32 +270,36 @@ export default function App() {
       {/* Main Content Area */}
       <main className="flex-1 pt-24 md:pt-32">
         
-        {/* 2. Hero Editorial Section */}
+        {/* 2. Hero Editorial Section with Morph Lookbook Slider */}
         <Hero
           onExploreClick={handleScrollToCatalog}
           onOpenQuickView={handleOpenModal}
-          featuredProduct={PRODUCTS[0]}
+          featuredProducts={PRODUCTS.slice(0, 3)}
         />
 
         {/* 3. Dedicated Luxury Category Filter & Sorting Bar */}
         <CategoryFilterBar
           selectedCategory={selectedCategory}
-          onSelectCategory={(cat) => {
-            setSelectedCategory(cat);
-            handleScrollToCatalog();
-          }}
+          onSelectCategory={handleCategorySelect}
           categories={CATEGORIES}
           productCount={filteredProducts.length}
           sortBy={sortBy}
           onSortChange={setSortBy}
         />
 
-        {/* 4. Product Catalog Grid (Mobile 2-columns, Desktop 3/4-columns) */}
+        {/* 4. Product Catalog Grid with Stagger & Skeleton Loading */}
         <section
           id="catalog-grid"
           className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-10 sm:py-16"
         >
-          {filteredProducts.length === 0 ? (
+          {isCategoryLoading ? (
+            /* Skeleton Loading Grid */
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <ProductSkeleton key={i} />
+              ))}
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="text-center py-20 bg-[#FAF6F0] rounded-2xl border border-[#E8DFD5] space-y-3">
               <p className="font-display text-lg text-[#2A2421]">
                 هیچ محصولی با مشخصات جستجوی شما یافت نشد.
@@ -304,9 +316,11 @@ export default function App() {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-              {filteredProducts.map((product) => (\n                <ProductCard
+              {filteredProducts.map((product, idx) => (
+                <ProductCard
                   key={product.id}
                   product={product}
+                  index={idx}
                   onOpenModal={handleOpenModal}
                   onQuickAdd={handleQuickAdd}
                   isWishlisted={wishlist.some((item) => item.id === product.id)}
@@ -326,12 +340,7 @@ export default function App() {
       </main>
 
       {/* 7. Footer Component */}
-      <Footer
-        onSelectCategory={(cat) => {
-          setSelectedCategory(cat);
-          handleScrollToCatalog();
-        }}
-      />
+      <Footer onSelectCategory={handleCategorySelect} />
 
       {/* Slide-over Cart Drawer */}
       <CartDrawer

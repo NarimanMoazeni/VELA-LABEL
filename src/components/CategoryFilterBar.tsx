@@ -46,7 +46,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
   return (
     <section
       id="catalog-filter-bar"
-      className="sticky top-28 z-30 bg-[#F5F0EB]/95 backdrop-blur-md py-3 border-y border-[#E8DFD5] shadow-xs transition-all select-none"
+      className="sticky top-20 sm:top-24 z-30 bg-[#F5F0EB]/95 backdrop-blur-md py-3 border-y border-[#E8DFD5] shadow-xs transition-all select-none"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-3.5">
         
