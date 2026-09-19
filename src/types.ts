@@ -36,6 +36,7 @@ export interface CustomerOrderData {
   fullName: string;
   phone: string;
   address: string;
+  postalCode?: string;
   notes?: string;
 }
 
