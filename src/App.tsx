@@ -4,14 +4,14 @@ import { Hero } from './components/Hero';
 import { ProductCard } from './components/ProductCard';
 import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
+import { CategoryFilterBar } from './components/CategoryFilterBar';
 import { AtelierPhilosophy } from './components/AtelierPhilosophy';
 import { BespokeBanner } from './components/BespokeBanner';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import { WishlistModal } from './components/WishlistModal';
-import { PRODUCTS, CATEGORIES, toPersianDigits } from './data/products';
+import { PRODUCTS, CATEGORIES } from './data/products';
 import { Product, CartItem, CustomerOrderData, ToastData } from './types';
-import { SlidersHorizontal, ShoppingBag } from 'lucide-react';
 
 export default function App() {
   // Products & Filtering state
@@ -35,7 +35,6 @@ export default function App() {
     } catch {
       // Fallback
     }
-    // Default initial sample item matching Stitch design
     return [
       {
         id: 'vela-804-۳۸-کمل برنز',
@@ -189,16 +188,16 @@ export default function App() {
     const exists = wishlist.some((item) => item.id === product.id);
     if (exists) {
       setWishlist((prev) => prev.filter((item) => item.id !== product.id));
-      showToast(`«${product.title}» از لیست علاقه‌مندی‌ها حذف شد`);
+      showToast(`«${product.title}» از لیست برگزیده‌ها حذف شد`);
     } else {
       setWishlist((prev) => [...prev, product]);
-      showToast(`«${product.title}» به لیست علاقه‌مندی‌ها اضافه شد`);
+      showToast(`«${product.title}» به لیست برگزیده‌ها اضافه شد`);
     }
   };
 
   const handleRemoveFromWishlist = (product: Product) => {
     setWishlist((prev) => prev.filter((item) => item.id !== product.id));
-    showToast(`«${product.title}» از علاقه‌مندی‌ها حذف شد`);
+    showToast(`«${product.title}» از برگزیده‌ها حذف شد`);
   };
 
   // Modal handlers
@@ -228,7 +227,7 @@ export default function App() {
     }).sort((a, b) => {
       if (sortBy === 'price-desc') return b.price - a.price;
       if (sortBy === 'price-asc') return a.price - b.price;
-      return 0; // default featured order
+      return 0;
     });
   }, [selectedCategory, sortBy, searchQuery]);
 
@@ -244,9 +243,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F0EB] text-[#2A2421] selection:bg-[#FADDCE] selection:text-[#27180B]">
+    <div className="min-h-screen flex flex-col bg-[#F5F0EB] text-[#2A2421] selection:bg-[#E8DFD5] selection:text-[#2A2421]">
       
-      {/* 1. Header Component */}
+      {/* 1. Balanced Luxury Header with Real VELA Logo */}
       <Header
         cartCount={cartTotalCount}
         wishlistCount={wishlist.length}
@@ -262,73 +261,29 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 pt-20 md:pt-28">
+      <main className="flex-1 pt-24 md:pt-32">
         
         {/* 2. Hero Editorial Section */}
         <Hero
           onExploreClick={handleScrollToCatalog}
           onOpenQuickView={handleOpenModal}
-          featuredProduct={PRODUCTS[3]} // کت مونوکروم سند اوور سایز (Look 01)
+          featuredProduct={PRODUCTS[0]}
         />
 
-        {/* 3. Sticky Filter & Sorting Bar */}
-        <section
-          id="catalog-filter-bar"
-          className="sticky top-20 z-30 bg-[#F5F0EB]/95 backdrop-blur-md py-3.5 border-y border-[#E8DFD5] shadow-xs"
-        >
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
-            
-            {/* Category Filter Pills (Horizontal scrollable) */}
-            <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 no-scrollbar">
-              {CATEGORIES.map((cat) => {
-                const isActive = selectedCategory === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all active:scale-95 ${
-                      isActive
-                        ? 'bg-[#2A2421] text-[#FAF6F0] shadow-sm'
-                        : 'bg-[#FAF6F0] text-[#5A504B] hover:text-[#2A2421] hover:bg-[#E8DFD5] border border-[#E8DFD5]'
-                    }`}
-                  >
-                    <span>{cat.label}</span>
-                    {cat.hasStar && (
-                      <span className="text-[#D4C5B9] text-[11px]">✦</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+        {/* 3. Dedicated Luxury Category Filter & Sorting Bar */}
+        <CategoryFilterBar
+          selectedCategory={selectedCategory}
+          onSelectCategory={(cat) => {
+            setSelectedCategory(cat);
+            handleScrollToCatalog();
+          }}
+          categories={CATEGORIES}
+          productCount={filteredProducts.length}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+        />
 
-            {/* Sorting Dropdown & Items Count */}
-            <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto text-xs">
-              <span className="text-[#786C65] whitespace-nowrap">
-                <strong className="text-[#2A2421] font-bold">
-                  {toPersianDigits(filteredProducts.length)}
-                </strong>{' '}
-                آیتم دست‌دوز مزون
-              </span>
-
-              <div className="flex items-center gap-1.5 bg-[#FFFFFF] border border-[#E8DFD5] px-3 py-1.5 rounded-full shadow-xs">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-[#A08875]" />
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent text-xs text-[#2A2421] focus:outline-none cursor-pointer"
-                >
-                  <option value="featured">ترتیب: جدیدترین کالکشن</option>
-                  <option value="price-desc">قیمت: از بیشترین به کمترین</option>
-                  <option value="price-asc">قیمت: از کمترین به بیشترین</option>
-                  <option value="popular">محبوب‌ترین نگاه استایلیست‌ها</option>
-                </select>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* 4. Product Catalog Grid (Mobile 2-columns, Desktop 4-columns) */}
+        {/* 4. Product Catalog Grid (Mobile 2-columns, Desktop 3/4-columns) */}
         <section
           id="catalog-grid"
           className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-10 sm:py-16"
@@ -343,20 +298,20 @@ export default function App() {
                   setSelectedCategory('all');
                   setSearchQuery('');
                 }}
-                className="py-2 px-5 rounded-full bg-[#2A2421] text-white text-xs font-medium"
+                className="py-2.5 px-6 rounded-full bg-[#2A2421] text-white text-xs font-medium cursor-pointer hover:bg-stone-800 transition"
               >
-                نمایش همه محصولات
+                نمایش همه محصولات مزون
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
                   onOpenModal={handleOpenModal}
                   onQuickAdd={handleQuickAdd}
-                  isWishlisted={wishlist.some((w) => w.id === product.id)}
+                  isWishlisted={wishlist.some((item) => item.id === product.id)}
                   onToggleWishlist={handleToggleWishlist}
                 />
               ))}
@@ -364,29 +319,18 @@ export default function App() {
           )}
         </section>
 
-        {/* 5. Atelier Fabric Origins & Craftsmanship Section */}
+        {/* 5. Atelier Materials & Philosophy with Hover Gradient Glow */}
         <AtelierPhilosophy />
 
-        {/* 6. Bespoke Appointment & Styling Consultation Banner */}
-        <BespokeBanner />
+        {/* 6. Bespoke Tailoring Consultation Banner */}
+        <BespokeBanner onOpenCart={() => setIsCartOpen(true)} />
 
       </main>
 
       {/* 7. Footer Component */}
-      <Footer onSelectCategory={(cat) => {
-        setSelectedCategory(cat);
-        handleScrollToCatalog();
-      }} />
+      <Footer />
 
-      {/* Product Detail & Sizing Modal */}
-      <ProductModal
-        product={activeModalProduct}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onAddToCart={handleAddToCart}
-      />
-
-      {/* Slide-over Cart Drawer & Telegram Checkout */}
+      {/* Slide-over Cart Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -399,32 +343,37 @@ export default function App() {
         onShowToast={showToast}
       />
 
+      {/* Product Quick-View / Size Selector Modal */}
+      {activeModalProduct && (
+        <ProductModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          product={activeModalProduct}
+          onAddToCart={handleAddToCart}
+          isWishlisted={wishlist.some(
+            (item) => item.id === activeModalProduct.id
+          )}
+          onToggleWishlist={handleToggleWishlist}
+        />
+      )}
+
       {/* Wishlist Modal */}
       <WishlistModal
         isOpen={isWishlistOpen}
         onClose={() => setIsWishlistOpen(false)}
-        wishlist={wishlist}
+        items={wishlist}
         onRemoveFromWishlist={handleRemoveFromWishlist}
-        onAddToCart={(p) => {
-          handleAddToCart(p, p.sizes[0] || '۳۸', p.colors[0]?.name || 'کرم نود', 1);
+        onAddToCart={(product) => {
+          handleAddToCart(
+            product,
+            product.sizes[0] || '۳۸',
+            product.colors[0]?.name || 'کرم نود',
+            1
+          );
         }}
       />
 
-      {/* Floating Quick Cart Button for Mobile Ease */}
-      <button
-        onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 py-3 px-5 rounded-full bg-[#2A2421] text-[#FAF6F0] shadow-2xl hover:scale-105 active:scale-95 transition-all border border-white/15"
-        id="floating-cart-trigger"
-        aria-label="مشاهده سبد خرید"
-      >
-        <ShoppingBag className="w-4 h-4 text-[#D4C5B9]" />
-        <span className="text-xs font-medium">سبد مزون</span>
-        <span className="w-5 h-5 rounded-full bg-[#A08875] text-white text-[10px] font-bold flex items-center justify-center">
-          {toPersianDigits(cartTotalCount)}
-        </span>
-      </button>
-
-      {/* Toast Notification Container */}
+      {/* Toast Notifications */}
       <Toast toasts={toasts} onDismiss={handleDismissToast} />
 
     </div>
