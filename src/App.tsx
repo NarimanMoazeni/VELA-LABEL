@@ -59,10 +59,10 @@ export default function App() {
     }
     return [
       {
-        id: 'vela-804-۳۸-کمل برنز',
+        id: 'vla-st-002-۳۸-شکلاتی پاییزی',
         product: PRODUCTS[0],
         size: '۳۸',
-        color: 'کمل برنز',
+        color: 'شکلاتی پاییزی',
         quantity: 1,
       },
     ];

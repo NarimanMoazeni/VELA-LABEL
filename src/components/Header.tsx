@@ -29,18 +29,17 @@ export const Header: React.FC<HeaderProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 25);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { id: 'all', label: 'همه کالکشن' },
-    { id: 'coat', label: 'پالتو و بارانی' },
+    { id: 'all', label: 'همه محصولات' },
+    { id: 'set', label: 'ست وست و شلوار' },
     { id: 'blazer', label: 'کت و بلیزر' },
-    { id: 'silk', label: 'شومیز و ابریشم' },
-    { id: 'trousers', label: 'انواع شلوار' },
+    { id: 'bespoke', label: 'شخصی‌دوزی مزون' },
   ];
 
   return (
@@ -48,17 +47,17 @@ export const Header: React.FC<HeaderProps> = ({
       isScrolled ? 'bg-[#F5F0EB]/95 shadow-xs backdrop-blur-md' : 'bg-[#F5F0EB]'
     } border-b border-[#E8DFD5]`}>
       
-      {/* 1. Subtle Compact Top Announcement Bar */}
-      <div className="w-full bg-[#2A2421] text-[#FAF6F0] py-1 px-4 text-center text-[10px] sm:text-[10.5px] font-normal tracking-normal flex items-center justify-center gap-2 select-none">
+      {/* 1. Top Compact Notification Bar */}
+      <div className="w-full bg-[#2A2421] text-[#FAF6F0] py-1 px-4 text-center text-[10px] sm:text-[10.5px] font-normal flex items-center justify-center gap-2 select-none">
         <span className="text-[#D4C5B9] text-[8px]">✦</span>
-        <span>کالکشن کپسولی آتلیه ولا • ارسال بیمه‌شده و شخصی‌دوزی در سراسر کشور</span>
+        <span>کالکشن پاییز و زمستان ولا لیبل • ارسال فوری با بسته‌بندی نفیس و کاور اختصاصی</span>
         <span className="text-[#D4C5B9] text-[8px]">✦</span>
       </div>
 
-      {/* 2. Main Navigation Bar (h-14 sm:h-16) */}
+      {/* 2. Main Navigation Bar */}
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-4">
         
-        {/* Right Section (in RTL): Mobile Menu Toggle & Desktop Links */}
+        {/* Right Section (in RTL): Mobile Menu & Desktop Links */}
         <div className="flex items-center gap-3 sm:gap-6">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
@@ -92,29 +91,34 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
         </div>
 
-        {/* Center Section: Dominant VELA LABEL Logo */}
+        {/* Center Section: Real Circular Badge Logo */}
         <div
           onClick={() => onSelectCategory('all')}
-          className="flex flex-col items-center justify-center cursor-pointer group select-none text-center"
+          className="flex items-center gap-2.5 cursor-pointer group select-none"
           title="صفحه نخست VELA LABEL"
         >
-          <span
-            className="font-serif text-xl sm:text-2xl text-[#2A2421] font-normal uppercase transition-opacity duration-200 group-hover:opacity-80"
-            style={{ letterSpacing: '0.22em' }}
-            dir="ltr"
-          >
-            VELA LABEL
-          </span>
-          <span
-            className="text-[8px] sm:text-[8.5px] uppercase text-[#A08875] font-sans font-medium"
-            style={{ letterSpacing: '0.28em' }}
-            dir="ltr"
-          >
-            ATELIER • TEHRAN
-          </span>
+          <img
+            src="/products/logo.webp"
+            alt="لوگوی رسمی ولا لیبل"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-[#D4C5B9]/60 shadow-xs group-hover:scale-105 transition-transform"
+          />
+          <div className="flex flex-col text-right">
+            <span
+              className="font-serif text-base sm:text-lg text-[#2A2421] font-bold uppercase leading-none tracking-[0.16em]"
+              dir="ltr"
+            >
+              VELA
+            </span>
+            <span
+              className="text-[7.5px] sm:text-[8px] uppercase text-[#A08875] font-sans font-medium tracking-[0.24em]"
+              dir="ltr"
+            >
+              ATELIER • TEHRAN
+            </span>
+          </div>
         </div>
 
-        {/* Left Section: Interactive Actions (Search, Wishlist, Cart) */}
+        {/* Left Section: Search, Wishlist, Cart */}
         <div className="flex items-center gap-2 sm:gap-2.5">
           
           {/* Search Toggle / Input */}
@@ -189,21 +193,16 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="fixed inset-y-0 right-0 w-4/5 max-w-sm bg-[#FFFFFF] p-5 shadow-2xl flex flex-col justify-between z-10 border-l border-[#E8DFD5]">
             <div className="space-y-5">
               <div className="flex items-center justify-between pb-3.5 border-b border-[#E8DFD5]">
-                <div className="flex flex-col">
-                  <span
-                    className="font-serif text-lg text-[#2A2421] uppercase"
-                    style={{ letterSpacing: '0.18em' }}
-                    dir="ltr"
-                  >
-                    VELA LABEL
-                  </span>
-                  <span
-                    className="text-[8px] text-[#A08875] uppercase"
-                    style={{ letterSpacing: '0.22em' }}
-                    dir="ltr"
-                  >
-                    ATELIER • TEHRAN
-                  </span>
+                <div className="flex items-center gap-2">
+                  <img
+                    src="/products/logo.webp"
+                    alt="لوگوی ولا لیبل"
+                    className="w-8 h-8 rounded-full object-cover border border-[#D4C5B9]"
+                  />
+                  <div className="flex flex-col text-right">
+                    <span className="font-serif text-sm text-[#2A2421] font-bold">VELA LABEL</span>
+                    <span className="text-[7.5px] text-[#A08875] tracking-wider uppercase">ATELIER TEHRAN</span>
+                  </div>
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -213,10 +212,10 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
 
-              {/* Mobile Category Links */}
+              {/* Category Links */}
               <nav className="flex flex-col space-y-2.5">
                 <span className="text-[10px] text-[#A08875] uppercase tracking-wider font-semibold">
-                  دسته‌بندی‌های مزون
+                  دسته‌بندی‌های کالکشن
                 </span>
                 {navLinks.map((item) => (
                   <button
@@ -244,7 +243,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="flex items-center justify-center gap-2 w-full py-2 rounded-full bg-[#FAF6F0] border border-[#E8DFD5] text-xs text-[#2A2421] font-medium"
               >
                 <Send className="w-3 h-3 text-[#A08875]" />
-                <span>مشاوره استایل در تلگرام</span>
+                <span>مشاوره انتخاب سایز در تلگرام</span>
               </a>
               <a
                 href="https://instagram.com/velalabel"

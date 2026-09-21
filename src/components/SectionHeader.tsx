@@ -7,8 +7,7 @@ interface SectionHeaderProps {
   englishLabel?: string;
   actionText?: string;
   onAction?: () => void;
-  hasTopDivider?: boolean;
-  hasBottomDivider?: boolean;
+  centered?: boolean;
   className?: string;
 }
 
@@ -18,55 +17,50 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   englishLabel,
   actionText,
   onAction,
-  hasTopDivider = false,
-  hasBottomDivider = true,
+  centered = true,
   className = '',
 }) => {
   return (
     <div className={`w-full select-none ${className}`}>
-      {/* Subtle Top Divider if requested */}
-      {hasTopDivider && (
-        <div className="w-full flex items-center justify-center mb-6">
-          <div className="w-full h-px bg-[#E8DFD5]/80"></div>
-        </div>
-      )}
-
-      {/* Main Header Row */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4">
-        <div className="space-y-1">
+      {/* Decorative Line with Centered Title (Inspired by top boutique references) */}
+      <div className="flex items-center justify-center gap-4 sm:gap-6 my-2">
+        <div className="h-px bg-gradient-to-l from-[#A08875]/60 via-[#E8DFD5] to-transparent flex-1"></div>
+        
+        <div className="text-center px-2 space-y-1">
           {englishLabel && (
             <span
-              className="text-[10px] text-[#A08875] uppercase font-serif font-medium tracking-[0.22em] block"
+              className="text-[9.5px] text-[#A08875] uppercase font-serif font-medium tracking-[0.22em] block"
               dir="ltr"
             >
               {englishLabel}
             </span>
           )}
-          <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-[#1C1917] tracking-tight leading-snug">
+          <h2 className="font-display text-lg sm:text-2xl font-bold text-[#1C1917] tracking-tight leading-snug">
             {title}
           </h2>
+        </div>
+
+        <div className="h-px bg-gradient-to-r from-[#A08875]/60 via-[#E8DFD5] to-transparent flex-1"></div>
+      </div>
+
+      {/* Subtitle & Optional Action Link */}
+      {(subtitle || (actionText && onAction)) && (
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-1 text-center">
           {subtitle && (
             <p className="text-xs sm:text-[13px] text-[#786C65] font-normal leading-relaxed">
               {subtitle}
             </p>
           )}
-        </div>
 
-        {actionText && onAction && (
-          <button
-            onClick={onAction}
-            className="flex items-center gap-1.5 text-xs font-medium text-[#2A2421] hover:text-[#A08875] transition-colors self-start sm:self-auto cursor-pointer skip-delay group"
-          >
-            <span>{actionText}</span>
-            <ArrowLeft className="w-3.5 h-3.5 text-[#A08875] group-hover:-translate-x-1 transition-transform" />
-          </button>
-        )}
-      </div>
-
-      {/* Subtle Minimal Bottom Divider */}
-      {hasBottomDivider && (
-        <div className="w-full flex items-center justify-center">
-          <div className="w-full h-px bg-[#E8DFD5]/80"></div>
+          {actionText && onAction && (
+            <button
+              onClick={onAction}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2A2421] hover:text-[#A08875] transition-colors cursor-pointer skip-delay group sm:mr-3"
+            >
+              <span>{actionText}</span>
+              <ArrowLeft className="w-3.5 h-3.5 text-[#A08875] group-hover:-translate-x-1 transition-transform" />
+            </button>
+          )}
         </div>
       )}
     </div>

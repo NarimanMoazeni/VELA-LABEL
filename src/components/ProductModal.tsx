@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ShoppingBag, Check, Ruler, Heart } from 'lucide-react';
+import { X, ShoppingBag, Check, Ruler, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../types';
 
 interface ProductModalProps {

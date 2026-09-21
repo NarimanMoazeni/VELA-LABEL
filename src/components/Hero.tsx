@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, ChevronLeft, ArrowUpLeft, Sparkles } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ArrowUpLeft, Sparkles, ShieldCheck } from 'lucide-react';
 import { Product } from '../types';
 import { toPersianDigits } from '../data/products';
 
@@ -17,7 +17,7 @@ export const Hero: React.FC<HeroProps> = ({
   featuredProduct,
 }) => {
   const looks = featuredProducts.length > 0
-    ? featuredProducts.slice(0, 3)
+    ? featuredProducts
     : featuredProduct
     ? [featuredProduct]
     : [];
@@ -44,10 +44,10 @@ export const Hero: React.FC<HeroProps> = ({
             {/* 1. Campaign Label */}
             <div className="flex items-center gap-2">
               <span
-                className="text-[10px] text-[#A08875] tracking-[0.24em] uppercase font-serif font-semibold"
+                className="text-[10px] text-[#A08875] tracking-[0.22em] uppercase font-serif font-semibold"
                 dir="ltr"
               >
-                AUTUMN / WINTER 2026 • ATELIER CAPSULE
+                AUTUMN / WINTER 2026 • VELA ATELIER
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#A08875]"></span>
             </div>
@@ -57,14 +57,14 @@ export const Hero: React.FC<HeroProps> = ({
               <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl text-[#1C1917] font-bold tracking-tight leading-[1.25]">
                 اصالت، وقار و سادگی
               </h1>
-              <p className="font-display text-sm sm:text-base lg:text-lg text-[#6B5F58] font-medium">
-                کالکشن کپسولی کت، شومیز، پالتو و شلوارهای دست‌دوز
+              <p className="font-display text-sm sm:text-base lg:text-lg text-[#6B5F58] font-semibold">
+                کالکشن پاییز و زمستان ولا لیبل
               </p>
             </div>
 
-            {/* 3. Short Description */}
+            {/* 3. Short Authentic Commercial Description (Zero AI Slop) */}
             <p className="text-xs sm:text-[13px] text-[#786C65] font-normal leading-relaxed max-w-lg">
-              توازن میان خطوط مینیمال معاصر، الیاف ارگانیک و ظرافت دوخت شخصی‌دوزی مزونی. طراحی‌شده برای کمد کپسولی بانوان جهت تجربه وقار در نهایت راحتی.
+              طراحی اختصاصی و دوخت تمیز مزونی در آتلیه تهران. عرضه مستقیم ست‌های پاییزی و کت‌های تک با فیت بی‌نقص و پارچه‌های مرغوب بدون چروک.
             </p>
 
             {/* 4 & 5. Primary and Secondary CTAs */}
@@ -83,27 +83,27 @@ export const Hero: React.FC<HeroProps> = ({
                   onClick={() => onOpenQuickView(currentLook)}
                   className="py-2.5 px-4 rounded-full bg-[#FAF6F0] border border-[#D4C5B9] text-[#2A2421] hover:border-[#2A2421] transition-all text-xs sm:text-sm font-medium flex items-center gap-1.5 cursor-pointer skip-delay"
                 >
-                  <span>بررسی استایل مدل {toPersianDigits(currentIndex + 1)}</span>
+                  <span>بررسی {currentLook.title}</span>
                   <ArrowUpLeft className="w-3.5 h-3.5 text-[#A08875]" />
                 </button>
               )}
             </div>
 
-            {/* 6. Trust Informational Bar */}
+            {/* 6. Trust Bar */}
             <div className="pt-3 border-t border-[#E8DFD5] flex items-center gap-4 text-[11px] text-[#8E827A]">
               <span className="flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-[#A08875]" />
-                الیاف ۱۰۰٪ طبیعی
+                <ShieldCheck className="w-3.5 h-3.5 text-[#A08875]" />
+                ضمانت کیفیت دوخت مزونی
               </span>
-              <span>✦ تطابق دقیق سایز</span>
-              <span>✦ ارسال بیمه‌شده مزون</span>
+              <span>✦ ارسال سریع با کاور اختصاصی</span>
+              <span>✦ پرو و شخصی‌دوزی در تهران</span>
             </div>
 
           </div>
 
           {/* Left Column (in RTL): Dominant Lookbook Fashion Image (6 cols) */}
           <div className="lg:col-span-6 order-1 lg:order-2">
-            <div className="relative aspect-[3/4] w-full max-w-sm sm:max-w-md lg:max-w-none mx-auto rounded-2xl overflow-hidden bg-[#EAE4D7] border border-[#E8DFD5] shadow-xs">
+            <div className="relative aspect-[3/4] w-full max-w-sm sm:max-w-md lg:max-w-none mx-auto rounded-3xl overflow-hidden bg-[#FAF6F0] border border-[#E8DFD5] shadow-md">
               
               {/* Morphing Editorial Image */}
               {looks.map((item, idx) => (
@@ -126,7 +126,7 @@ export const Hero: React.FC<HeroProps> = ({
               ))}
 
               {/* Lookbook Controls Overlay */}
-              <div className="absolute inset-x-3 bottom-3 z-20 flex items-center justify-between text-white p-2 sm:p-2.5 rounded-xl bg-black/40 backdrop-blur-md border border-white/15">
+              <div className="absolute inset-x-3 bottom-3 z-20 flex items-center justify-between text-white p-2.5 sm:p-3 rounded-2xl bg-black/45 backdrop-blur-md border border-white/15">
                 <div className="flex flex-col">
                   <span
                     className="text-[9px] text-[#D4C5B9] tracking-wider uppercase font-serif font-medium"

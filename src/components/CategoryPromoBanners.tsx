@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Sparkles } from 'lucide-react';
 
 interface CategoryPromoBannersProps {
   onSelectCategory: (categoryId: string) => void;
@@ -8,109 +8,85 @@ interface CategoryPromoBannersProps {
 export const CategoryPromoBanners: React.FC<CategoryPromoBannersProps> = ({
   onSelectCategory,
 }) => {
-  const promos = [
+  const banners = [
     {
-      id: 'coat',
-      tag: 'OUTERWEAR CAPSULE',
-      title: 'پالتو، ترنچ و بارانی',
-      description: 'دوخت ظریف با پشم مرینوس گرم‌بالا و پارچه ایتالیایی',
-      cta: 'مشاهده مجموعه پالتو',
-      image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1000&q=85',
-      bgClass: 'bg-[#F2ECE4]',
-      badge: 'پاییز و زمستان',
+      id: 'set',
+      tag: 'NEW CAPSULE SET',
+      title: 'ست وست و شلوار شکلاتی',
+      subtitle: 'جلیقه بافت‌دار طرحدار + شلوار واید راسته + کمربند چرم',
+      cta: 'مشاهده ست اختصاصی',
+      image: '/products/vla-st-002.webp',
+      badge: 'لوک اختصاصی ولا',
+      bgClass: 'bg-[#EDE6DE]',
     },
     {
       id: 'blazer',
-      tag: 'ATELIER TAILORING',
-      title: 'کت و بلیزرهای شخصی‌دوز',
-      description: 'طراحی ساختاریافته با کرپ مرغوب و آستر دوزی اختصاصی',
-      cta: 'مشاهده مجموعه کت',
-      image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=1000&q=85',
-      bgClass: 'bg-[#EDE6DE]',
-      badge: 'سفارشی‌دوزی',
-    },
-    {
-      id: 'silk',
-      tag: 'PURE SILK & LINEN',
-      title: 'شومیز و تاپ‌های ابریشم',
-      description: 'لطافت ۱۰۰٪ ابریشم طبیعی و لینن تنفس‌پذیر سنگ‌شور',
-      cta: 'مشاهده مجموعه شومیز',
-      image: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=1000&q=85',
-      bgClass: 'bg-[#EDE8E1]',
-      badge: 'کپسولی تابستان و پاییز',
-    },
-    {
-      id: 'trousers',
-      tag: 'MONOCHROME TROUSERS',
-      title: 'انواع شلوارهای کپسولی',
-      description: 'الگوی اختصاصی راسته و واید با ریزش شکیل روی اندام',
-      cta: 'مشاهده مجموعه شلوار',
-      image: 'https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=1000&q=85',
-      bgClass: 'bg-[#F0EBE3]',
-      badge: 'فیت بی‌نقص',
+      tag: 'TAILORED ATELIER',
+      title: 'کت‌های تک کلاسیک و مزونی',
+      subtitle: 'مدل‌های آدل و لورن با کرپ مازراتی و فاستونی اعلا',
+      cta: 'مشاهده کالکشن کت',
+      image: '/products/vla-adl-001.webp',
+      badge: 'پرفروش‌ترین آتلیه',
+      bgClass: 'bg-[#F2ECE4]',
     },
   ];
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 sm:py-10 select-none">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 sm:py-8 select-none">
       
-      {/* 2-Column Responsive Banner Grid on Tablet/Desktop, 1-Column on Mobile */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        {promos.map((promo) => (
+      {/* 2-Column Responsive Banner Grid on Desktop/Tablet, 1-Column on Mobile */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        {banners.map((item) => (
           <div
-            key={promo.id}
-            onClick={() => onSelectCategory(promo.id)}
-            className={`group relative ${promo.bgClass} rounded-2xl overflow-hidden border border-[#E8DFD5] p-5 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-6 cursor-pointer shadow-xs hover:shadow-md transition-all duration-300`}
+            key={item.id}
+            onClick={() => onSelectCategory(item.id)}
+            className={`group relative ${item.bgClass} rounded-2xl overflow-hidden border border-[#E8DFD5] p-5 sm:p-7 flex flex-row items-center justify-between gap-4 cursor-pointer shadow-xs hover:shadow-md transition-all duration-300`}
           >
-            {/* Right/Top: Content Block */}
-            <div className="flex-1 flex flex-col justify-between space-y-3 z-10 w-full sm:w-auto">
-              
+            {/* Content Side */}
+            <div className="flex-1 flex flex-col justify-between space-y-3 z-10">
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2">
                   <span
-                    className="text-[9.5px] sm:text-[10px] uppercase font-serif text-[#A08875] tracking-[0.2em] font-medium"
+                    className="text-[9.5px] uppercase font-serif text-[#A08875] tracking-[0.2em] font-medium"
                     dir="ltr"
                   >
-                    {promo.tag}
+                    {item.tag}
                   </span>
-                  <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-[#FAF6F0] text-[#786C65] border border-[#E8DFD5]">
-                    {promo.badge}
+                  <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#FFFFFF]/90 text-[#2A2421] border border-[#E8DFD5] font-semibold">
+                    {item.badge}
                   </span>
                 </div>
 
                 <h3 className="font-display text-xl sm:text-2xl font-bold text-[#1C1917] tracking-tight group-hover:text-[#A08875] transition-colors leading-snug">
-                  {promo.title}
+                  {item.title}
                 </h3>
 
-                <p className="text-xs sm:text-[13px] text-[#6B5F58] font-normal leading-relaxed line-clamp-2">
-                  {promo.description}
+                <p className="text-xs text-[#6B5F58] font-normal leading-relaxed line-clamp-2">
+                  {item.subtitle}
                 </p>
               </div>
 
-              {/* Small Refined CTA */}
-              <div className="pt-2">
+              {/* White Pill CTA Button (Inspired by Reference 1) */}
+              <div className="pt-1">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-2 py-2 px-4 rounded-full bg-[#2A2421] text-[#FAF6F0] group-hover:bg-[#140F0D] text-xs font-medium transition-all shadow-xs group-hover:gap-2.5 active:scale-95"
+                  className="inline-flex items-center gap-2 py-2 px-4 rounded-full bg-[#FFFFFF] text-[#2A2421] group-hover:bg-[#2A2421] group-hover:text-[#FAF6F0] text-xs font-semibold border border-[#D4C5B9] transition-all shadow-xs active:scale-95"
                 >
-                  <span>{promo.cta}</span>
-                  <ArrowLeft className="w-3.5 h-3.5 text-[#D4C5B9]" />
+                  <span>{item.cta}</span>
+                  <ArrowLeft className="w-3.5 h-3.5 text-[#A08875] group-hover:text-[#FAF6F0]" />
                 </button>
               </div>
-
             </div>
 
-            {/* Left/Bottom: Layered Fashion Image with 3:4 Aspect Ratio */}
-            <div className="relative w-full sm:w-44 md:w-52 shrink-0 aspect-[3/4] rounded-xl overflow-hidden bg-[#FAF6F0] border border-[#E8DFD5]/60 shadow-xs">
+            {/* Layered Image Frame */}
+            <div className="relative w-36 sm:w-44 md:w-48 shrink-0 aspect-[3/4] rounded-xl overflow-hidden bg-[#FFFFFF] border border-[#E8DFD5]/70 shadow-xs">
               <img
-                src={promo.image}
-                alt={promo.title}
+                src={item.image}
+                alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
             </div>
-
           </div>
         ))}
       </div>
