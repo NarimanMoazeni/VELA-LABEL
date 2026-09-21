@@ -46,11 +46,11 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
   return (
     <section
       id="catalog-filter-bar"
-      className="sticky top-20 sm:top-24 z-30 bg-[#F5F0EB]/95 backdrop-blur-md py-3 border-y border-[#E8DFD5] shadow-xs transition-all select-none"
+      className="sticky top-18 sm:top-20 z-30 bg-[#F5F0EB]/95 backdrop-blur-md py-3 border-y border-[#E8DFD5] shadow-xs select-none"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-3.5">
         
-        {/* Categories Navigation (Horizontal Scroll with Clean Luxury Style) */}
+        {/* Categories Navigation (Horizontal Scroll with Clean Style) */}
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 no-scrollbar">
           {categories.map((cat) => {
             const isActive = selectedCategory === cat.id;
@@ -60,7 +60,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
                 onClick={() => onSelectCategory(cat.id)}
                 className={`flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-pointer active:scale-95 ${
                   isActive
-                    ? 'bg-[#2A2421] text-[#FAF6F0] shadow-sm'
+                    ? 'bg-[#2A2421] text-[#FAF6F0] shadow-xs'
                     : 'bg-[#FAF6F0] text-[#5A504B] hover:text-[#2A2421] hover:bg-[#E8DFD5] border border-[#E8DFD5]'
                 }`}
               >
@@ -78,7 +78,7 @@ export const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({
           
           {/* Active Product Count */}
           <span className="text-[#786C65] text-xs whitespace-nowrap">
-            نمایش <strong className="text-[#2A2421] font-bold">{toPersianDigits(productCount)}</strong> آیتم کالکشن
+            نمایش <strong className="text-[#2A2421] font-bold">{toPersianDigits(productCount)}</strong> اثر کالکشن
           </span>
 
           {/* Custom Luxury Sort Dropdown */}

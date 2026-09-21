@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { ArrowUp } from 'lucide-react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
-import { EditorialCategories } from './components/EditorialCategories';
-import { FeaturedCollection } from './components/FeaturedCollection';
+import { CategoryPromoBanners } from './components/CategoryPromoBanners';
+import { CategoryGrid } from './components/CategoryGrid';
+import { WhyVela } from './components/WhyVela';
+import { SectionHeader } from './components/SectionHeader';
+import { CategoryFilterBar } from './components/CategoryFilterBar';
 import { ProductCard } from './components/ProductCard';
 import { ProductSkeleton } from './components/ProductSkeleton';
-import { ProductModal } from './components/ProductModal';
-import { CartDrawer } from './components/CartDrawer';
-import { CategoryFilterBar } from './components/CategoryFilterBar';
+import { FeaturedCollection } from './components/FeaturedCollection';
 import { AtelierPhilosophy } from './components/AtelierPhilosophy';
 import { BespokeBanner } from './components/BespokeBanner';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import { WishlistModal } from './components/WishlistModal';
+import { ProductModal } from './components/ProductModal';
+import { CartDrawer } from './components/CartDrawer';
 import { PRODUCTS, CATEGORIES } from './data/products';
 import { Product, CartItem, CustomerOrderData, ToastData } from './types';
 
@@ -22,12 +26,26 @@ export default function App() {
   const [sortBy, setSortBy] = useState<string>('featured');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isCategoryLoading, setIsCategoryLoading] = useState<boolean>(false);
+  const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
 
   // Modals and Drawers
   const [activeModalProduct, setActiveModalProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState<boolean>(false);
+
+  // Back to top scroll listener
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Cart state with localStorage persistence
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
@@ -124,11 +142,11 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Category change with luxury skeleton loading & smooth scroll
+  // Category change with quick skeleton loading & smooth scroll
   const handleCategorySelect = (cat: string) => {
     setIsCategoryLoading(true);
     setSelectedCategory(cat);
-    setTimeout(() => setIsCategoryLoading(false), 240);
+    setTimeout(() => setIsCategoryLoading(false), 200);
     handleScrollToCatalog();
   };
 
@@ -258,7 +276,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F0EB] text-[#2A2421] selection:bg-[#E8DFD5] selection:text-[#2A2421]">
       
-      {/* 1. Compact Editorial Header */}
+      {/* 1. Header: Fixed, compact, sticky on scroll */}
       <Header
         cartCount={cartTotalCount}
         wishlistCount={wishlist.length}
@@ -270,20 +288,105 @@ export default function App() {
         onSearchChange={setSearchQuery}
       />
 
-      {/* Main Content Area */}
-      <main className="flex-1 pt-20 sm:pt-22">
+      {/* Main Homepage Flow */}
+      <main className="flex-1 pt-18 sm:pt-20">
         
-        {/* 2. Tighter Editorial Hero Section */}
+        {/* 2. Hero / Campaign Section (50/50 Desktop, Compact Mobile) */}
         <Hero
           onExploreClick={handleScrollToCatalog}
           onOpenQuickView={handleOpenModal}
           featuredProducts={PRODUCTS.slice(0, 3)}
         />
 
-        {/* 3. Below Hero: Editorial Category Tiles (3 cards) */}
-        <EditorialCategories onSelectCategory={handleCategorySelect} />
+        {/* 3. Featured Category Promotional Banners */}
+        <CategoryPromoBanners onSelectCategory={handleCategorySelect} />
 
-        {/* 4. Editorial Featured Collection (1 dominant + 3 supporting) */}
+        {/* 4. Fast Category Discovery Grid (2 cols mobile, 6 cols desktop) */}
+        <CategoryGrid
+          activeCategory={selectedCategory}
+          onSelectCategory={handleCategorySelect}
+        />
+
+        {/* 5. Why VELA / Benefits & Trust Section */}
+        <WhyVela />
+
+        {/* 6. Main Catalog & New Arrivals */}
+        <section id="catalog-section" className="w-full">
+          
+          {/* Section Heading with subtle divider */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-6">
+            <SectionHeader
+              englishLabel="NEW ARRIVALS • FALL/WINTER 2026"
+              title="جدیدترین آثار کالکشن مزون"
+              subtitle="دست‌دوزهای منتخب این هفته با دوخت سفارشی و الیاف طبیعی وارداتی"
+              actionText="نمایش همه"
+              onAction={() => {
+                setSelectedCategory('all');
+                setSearchQuery('');
+                handleScrollToCatalog();
+              }}
+              hasTopDivider={true}
+              hasBottomDivider={false}
+              className="mb-4"
+            />
+          </div>
+
+          {/* Sticky Category Filter & Sort Bar */}
+          <CategoryFilterBar
+            selectedCategory={selectedCategory}
+            onSelectCategory={handleCategorySelect}
+            categories={CATEGORIES}
+            productCount={filteredProducts.length}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+          />
+
+          {/* Product Grid */}
+          <div
+            id="catalog-grid"
+            className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 sm:py-10"
+          >
+            {isCategoryLoading ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <ProductSkeleton key={i} />
+                ))}
+              </div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="text-center py-14 bg-[#FAF6F0] rounded-2xl border border-[#E8DFD5] space-y-3 px-4">
+                <p className="font-display text-sm sm:text-base text-[#2A2421]">
+                  هیچ اثری با مشخصات انتخابی شما یافت نشد.
+                </p>
+                <button
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setSearchQuery('');
+                  }}
+                  className="py-2.5 px-6 rounded-full bg-[#2A2421] text-white text-xs font-medium cursor-pointer hover:bg-stone-800 transition shadow-xs"
+                >
+                  نمایش همه محصولات مزون
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
+                {filteredProducts.map((product, idx) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    index={idx}
+                    onOpenModal={handleOpenModal}
+                    onQuickAdd={handleQuickAdd}
+                    isWishlisted={wishlist.some((item) => item.id === product.id)}
+                    onToggleWishlist={handleToggleWishlist}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+        </section>
+
+        {/* 7. Featured Collection Showcase */}
         <FeaturedCollection
           products={PRODUCTS}
           onOpenModal={handleOpenModal}
@@ -293,72 +396,30 @@ export default function App() {
           onViewAllClick={handleScrollToCatalog}
         />
 
-        {/* 5. Sticky Category Filter Bar */}
-        <CategoryFilterBar
-          selectedCategory={selectedCategory}
-          onSelectCategory={handleCategorySelect}
-          categories={CATEGORIES}
-          productCount={filteredProducts.length}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-        />
-
-        {/* 6. Main Product Catalog Grid */}
-        <section
-          id="catalog-grid"
-          className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 sm:py-12"
-        >
-          {isCategoryLoading ? (
-            /* Skeleton Loading Grid */
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <ProductSkeleton key={i} />
-              ))}
-            </div>
-          ) : filteredProducts.length === 0 ? (
-            <div className="text-center py-16 bg-[#FAF6F0] rounded-xl border border-[#E8DFD5] space-y-3">
-              <p className="font-display text-base sm:text-lg text-[#2A2421]">
-                هیچ محصولی با مشخصات جستجوی شما یافت نشد.
-              </p>
-              <button
-                onClick={() => {
-                  setSelectedCategory('all');
-                  setSearchQuery('');
-                }}
-                className="py-2.5 px-6 rounded-full bg-[#2A2421] text-white text-xs font-medium cursor-pointer hover:bg-stone-800 transition"
-              >
-                نمایش همه محصولات مزون
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-              {filteredProducts.map((product, idx) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  index={idx}
-                  onOpenModal={handleOpenModal}
-                  onQuickAdd={handleQuickAdd}
-                  isWishlisted={wishlist.some((item) => item.id === product.id)}
-                  onToggleWishlist={handleToggleWishlist}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* 7. Atelier Materials & Philosophy */}
+        {/* 8. Atelier Craftsmanship Philosophy */}
         <AtelierPhilosophy />
 
-        {/* 8. Bespoke Consultation Banner */}
+        {/* 9. Private Atelier Appointment Consultation Banner */}
         <BespokeBanner onOpenCart={() => setIsCartOpen(true)} />
 
       </main>
 
-      {/* 9. Minimalist Footer */}
+      {/* 10. Minimalist Boutique Footer */}
       <Footer onSelectCategory={handleCategorySelect} />
 
-      {/* Clean Linear Checkout Drawer (01-04) */}
+      {/* Floating Back to Top Button */}
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 left-6 z-30 w-9 h-9 rounded-full bg-[#2A2421] text-[#FAF6F0] flex items-center justify-center shadow-lg border border-[#E8DFD5]/40 hover:bg-[#140F0D] transition-all duration-200 active:scale-95 cursor-pointer skip-delay"
+          title="بازگشت به ابتدای صفحه"
+          aria-label="بازگشت به بالا"
+        >
+          <ArrowUp className="w-4 h-4" />
+        </button>
+      )}
+
+      {/* 4-Step Linear Checkout Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -371,7 +432,7 @@ export default function App() {
         onShowToast={showToast}
       />
 
-      {/* Product Modal */}
+      {/* Product Quick View & Detail Modal */}
       {activeModalProduct && (
         <ProductModal
           isOpen={isModalOpen}

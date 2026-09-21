@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Heart, ShoppingBag, Instagram, Send, X, Menu } from 'lucide-react';
 import { toPersianDigits } from '../data/products';
 
@@ -25,6 +25,15 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 30);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { id: 'all', label: 'همه کالکشن' },
@@ -35,29 +44,31 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="fixed top-0 w-full z-40 bg-[#F5F0EB]/95 backdrop-blur-md border-b border-[#E8DFD5] transition-all duration-200">
+    <header className={`fixed top-0 w-full z-40 transition-all duration-300 ${
+      isScrolled ? 'bg-[#F5F0EB]/95 shadow-xs backdrop-blur-md' : 'bg-[#F5F0EB]'
+    } border-b border-[#E8DFD5]`}>
       
-      {/* 1. Compact Top Campaign Bar */}
-      <div className="w-full bg-[#2A2421] text-[#FAF6F0] py-1 px-4 text-center text-[10px] sm:text-[10.5px] font-light tracking-wide flex items-center justify-center gap-2 select-none">
+      {/* 1. Subtle Compact Top Announcement Bar */}
+      <div className="w-full bg-[#2A2421] text-[#FAF6F0] py-1 px-4 text-center text-[10px] sm:text-[10.5px] font-normal tracking-normal flex items-center justify-center gap-2 select-none">
         <span className="text-[#D4C5B9] text-[8px]">✦</span>
-        <span>کالکشن کپسولی آتلیه ولا • ارسال بیمه‌شده و شخصی‌دوزی در تهران و سراسر کشور</span>
+        <span>کالکشن کپسولی آتلیه ولا • ارسال بیمه‌شده و شخصی‌دوزی در سراسر کشور</span>
         <span className="text-[#D4C5B9] text-[8px]">✦</span>
       </div>
 
-      {/* 2. Compact 3-Column Luxury Navigation Bar (h-14 sm:h-16) */}
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-14 sm:h-16 flex items-center justify-between gap-4">
+      {/* 2. Main Navigation Bar (h-14 sm:h-16) */}
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-4">
         
-        {/* Right Section (in RTL): Menu & Categories */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        {/* Right Section (in RTL): Mobile Menu Toggle & Desktop Links */}
+        <div className="flex items-center gap-3 sm:gap-6">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="md:hidden w-8 h-8 rounded-full border border-[#E8DFD5] flex items-center justify-center text-[#2A2421] hover:bg-[#FAF6F0] transition-colors cursor-pointer"
+            className="md:hidden w-8 h-8 rounded-full border border-[#E8DFD5] bg-[#FFFFFF] flex items-center justify-center text-[#2A2421] hover:bg-[#FAF6F0] transition-colors cursor-pointer"
             aria-label="منوی سایت"
           >
             <Menu className="w-4 h-4" />
           </button>
 
-          {/* Desktop Categories Menu with Consistent Spacing */}
+          {/* Desktop Categories Menu */}
           <nav className="hidden md:flex items-center gap-5 lg:gap-7">
             {navLinks.map((item) => {
               const isActive = activeCategory === item.id;
@@ -65,9 +76,9 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={item.id}
                   onClick={() => onSelectCategory(item.id)}
-                  className={`text-xs font-medium tracking-wide transition-all duration-150 relative py-1 cursor-pointer skip-delay ${
+                  className={`text-xs font-medium transition-all duration-150 relative py-1 cursor-pointer skip-delay ${
                     isActive
-                      ? 'text-[#2A2421] font-semibold'
+                      ? 'text-[#2A2421] font-bold'
                       : 'text-[#6B5F58] hover:text-[#2A2421]'
                   }`}
                 >
@@ -81,16 +92,24 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
         </div>
 
-        {/* Center Section: Pure High-Fashion Logo */}
+        {/* Center Section: Dominant VELA LABEL Logo */}
         <div
           onClick={() => onSelectCategory('all')}
           className="flex flex-col items-center justify-center cursor-pointer group select-none text-center"
           title="صفحه نخست VELA LABEL"
         >
-          <span className="font-serif text-xl sm:text-2xl tracking-[0.22em] text-[#2A2421] font-normal uppercase transition-opacity duration-200 group-hover:opacity-80">
+          <span
+            className="font-serif text-xl sm:text-2xl text-[#2A2421] font-normal uppercase transition-opacity duration-200 group-hover:opacity-80"
+            style={{ letterSpacing: '0.22em' }}
+            dir="ltr"
+          >
             VELA LABEL
           </span>
-          <span className="text-[8px] sm:text-[8.5px] tracking-[0.3em] uppercase text-[#A08875] font-sans font-medium">
+          <span
+            className="text-[8px] sm:text-[8.5px] uppercase text-[#A08875] font-sans font-medium"
+            style={{ letterSpacing: '0.28em' }}
+            dir="ltr"
+          >
             ATELIER • TEHRAN
           </span>
         </div>
@@ -101,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Search Toggle / Input */}
           <div className="relative">
             {isSearchOpen ? (
-              <div className="flex items-center bg-[#FAF6F0] border border-[#D4C5B9] rounded-full px-2.5 py-1 animate-fade-in shadow-xs">
+              <div className="flex items-center bg-[#FAF6F0] border border-[#D4C5B9] rounded-full px-2.5 py-1 shadow-xs">
                 <Search className="w-3.5 h-3.5 text-[#786C65] ml-1 shrink-0" />
                 <input
                   type="text"
@@ -165,16 +184,24 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Navigation Drawer */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#2A2421]/60 backdrop-blur-sm md:hidden animate-fade-in">
+        <div className="fixed inset-0 z-50 bg-[#2A2421]/60 backdrop-blur-sm md:hidden">
           <div className="fixed inset-0" onClick={() => setIsMobileMenuOpen(false)}></div>
           <div className="fixed inset-y-0 right-0 w-4/5 max-w-sm bg-[#FFFFFF] p-5 shadow-2xl flex flex-col justify-between z-10 border-l border-[#E8DFD5]">
             <div className="space-y-5">
               <div className="flex items-center justify-between pb-3.5 border-b border-[#E8DFD5]">
                 <div className="flex flex-col">
-                  <span className="font-serif text-lg tracking-[0.18em] text-[#2A2421] uppercase">
+                  <span
+                    className="font-serif text-lg text-[#2A2421] uppercase"
+                    style={{ letterSpacing: '0.18em' }}
+                    dir="ltr"
+                  >
                     VELA LABEL
                   </span>
-                  <span className="text-[8px] tracking-[0.25em] text-[#A08875] uppercase">
+                  <span
+                    className="text-[8px] text-[#A08875] uppercase"
+                    style={{ letterSpacing: '0.22em' }}
+                    dir="ltr"
+                  >
                     ATELIER • TEHRAN
                   </span>
                 </div>
@@ -186,7 +213,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
 
-              {/* Mobile Links */}
+              {/* Mobile Category Links */}
               <nav className="flex flex-col space-y-2.5">
                 <span className="text-[10px] text-[#A08875] uppercase tracking-wider font-semibold">
                   دسته‌بندی‌های مزون
