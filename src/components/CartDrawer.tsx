@@ -30,19 +30,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   if (!isOpen) return null;
 
-  // Calculate total price
   const totalPrice = items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
 
-  // Copy card number
   const handleCopyCard = () => {
     navigator.clipboard
       .writeText(BANK_CARD_DETAILS.cardNumberRaw)
       .then(() => {
         setCopied(true);
-        onShowToast('شماره کارت با موفقیت کپی شد');
+        onShowToast('شماره کارت کپی شد');
         setTimeout(() => setCopied(false), 2500);
       })
       .catch(() => {
@@ -50,15 +48,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       });
   };
 
-  // Submit Order via Telegram
   const handleSubmitTelegramOrder = () => {
     if (items.length === 0) {
-      onShowToast('سبد خرید شما خالی است');
+      onShowToast('سبد خرید خالی است');
       return;
     }
-
     if (!customerData.fullName.trim() || !customerData.phone.trim()) {
-      onShowToast('لطفاً نام و شماره همراه خود را وارد نمایید');
+      onShowToast('نام و شماره همراه را وارد کنید');
       return;
     }
 
@@ -71,166 +67,97 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       )
       .join('\n');
 
-    const totalFormatted = formatTomans(totalPrice);
-
     const messageText =
-      `✦ ثبت سفارش اختصاصی در مزون VELA LABEL ✦\n\n` +
+      `✦ سفارش مزون VELA LABEL ✦\n\n` +
       `خریدار: ${customerData.fullName}\n` +
-      `شماره تماس: ${customerData.phone}\n` +
-      `آدرس تحویل: ${customerData.address || 'اعلام در چت'}\n` +
+      `تماس: ${customerData.phone}\n` +
+      `آدرس: ${customerData.address || 'اعلام در چت'}\n` +
       (customerData.postalCode ? `کد پستی: ${customerData.postalCode}\n` : '') +
-      `\nاقلام سفارش:\n${orderItemsSummary}\n\n` +
-      `مبلغ کل قابل واریز: ${totalFormatted}\n` +
-      `واریز به کارت: ${BANK_CARD_DETAILS.cardNumber} (${BANK_CARD_DETAILS.bankName})\n\n` +
-      `لطفاً تصویر فیش واریز را پس از ارسال این پیام ضمیمه فرمایید.`;
+      `\nاقلام:\n${orderItemsSummary}\n\n` +
+      `مبلغ کل: ${formatTomans(totalPrice)}\n` +
+      `واریز به: ${BANK_CARD_DETAILS.cardNumber} (${BANK_CARD_DETAILS.bankName})\n\n` +
+      `لطفاً تصویر فیش واریز را ارسال فرمایید.`;
 
     const encodedText = encodeURIComponent(messageText);
-    const telegramUrl = `https://t.me/velalabel?text=${encodedText}`;
-
-    window.open(telegramUrl, '_blank');
-    onShowToast('در حال انتقال به تلگرام مشاور اختصاصی مزون ولا...');
+    window.open(`https://t.me/velalabel?text=${encodedText}`, '_blank');
+    onShowToast('در حال انتقال به تلگرام...');
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#2A2421]/60 backdrop-blur-sm p-0 sm:p-4 md:p-6 flex items-center justify-center animate-fade-in select-none">
-      
-      {/* Background click to close */}
-      <div className="fixed inset-0" onClick={onClose}></div>
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#2A2421]/50 backdrop-blur-sm flex items-center justify-center animate-fade-in select-none">
+      <div className="fixed inset-0" onClick={onClose} />
 
-      {/* Main Checkout Modal Container */}
-      <div className="relative w-full max-w-4xl bg-[#FFFFFF] sm:rounded-2xl shadow-2xl border border-[#E8DFD5] flex flex-col max-h-screen sm:max-h-[92vh] overflow-hidden z-10">
-        
-        {/* Checkout Header */}
+      <div className="relative w-full max-w-4xl bg-white border border-[#E8DFD5] flex flex-col max-h-screen sm:max-h-[92vh] overflow-hidden z-10">
+        {/* Header */}
         <div className="px-5 sm:px-8 py-4 bg-[#FAF6F0] border-b border-[#E8DFD5] flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#2A2421] text-[#FAF6F0] flex items-center justify-center">
-              <ShoppingBag className="w-4 h-4 text-[#D4C5B9]" />
+          <div>
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="w-4 h-4 text-[#A08875]" />
+              <h2 className="font-display text-sm sm:text-base font-bold text-[#2A2421]">
+                تسویه‌حساب و ثبت سفارش
+              </h2>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-serif text-sm tracking-widest text-[#2A2421] uppercase">VELA LABEL</span>
-                <span className="text-[#A08875] text-xs">•</span>
-                <h2 className="font-display text-sm sm:text-base font-bold text-[#2A2421]">
-                  تسویه‌حساب و ثبت سفارش
-                </h2>
-              </div>
-              <p className="text-[10.5px] text-[#786C65]">
-                {items.length > 0
-                  ? `${toPersianDigits(items.length)} آیتم دست‌دوز در سبد خرید شما`
-                  : 'سبد خرید شما در حال حاضر خالی است'}
-              </p>
-            </div>
+            <p className="text-[10px] text-[#786C65] mt-0.5">
+              {items.length > 0
+                ? `${toPersianDigits(items.length)} قلم در سبد خرید`
+                : 'سبد خرید خالی است'}
+            </p>
           </div>
-
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-[#FFFFFF] border border-[#E8DFD5] text-[#2A2421] flex items-center justify-center hover:bg-[#E8DFD5] transition-colors cursor-pointer skip-delay"
-            aria-label="بازگشت به سایت"
-            title="بستن پنجره"
+            className="w-8 h-8 flex items-center justify-center text-[#786C65] hover:text-[#2A2421] cursor-pointer"
+            aria-label="بستن"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Content Body */}
+        {/* Content */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-8">
           {items.length === 0 ? (
-            /* Empty State */
             <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-[#FAF6F0] border border-[#E8DFD5] flex items-center justify-center text-[#A08875]">
-                <ShoppingBag className="w-7 h-7" />
-              </div>
+              <ShoppingBag className="w-10 h-10 text-[#D4C5B9]" />
               <div className="space-y-1">
-                <h3 className="font-display text-lg text-[#2A2421] font-semibold">
-                  سبد خرید شما خالی است
-                </h3>
-                <p className="text-xs text-[#786C65] max-w-xs leading-relaxed">
-                  کالکشن کپسولی آتلیه ولا شامل پالتو، کت و شومیزهای ابریشمی را مشاهده کنید.
-                </p>
+                <h3 className="font-display text-lg text-[#2A2421] font-semibold">سبد خرید خالی است</h3>
+                <p className="text-xs text-[#786C65]">کالکشن آتلیه ولا را مشاهده کنید.</p>
               </div>
-              <button
-                onClick={onClose}
-                className="mt-2 py-2.5 px-6 rounded-full bg-[#2A2421] text-[#FAF6F0] text-xs font-medium hover:bg-[#140F0D] transition-colors cursor-pointer"
-              >
-                مشاهده کالکشن مزون
+              <button onClick={onClose} className="py-2.5 px-6 bg-[#2A2421] text-white text-xs font-medium cursor-pointer">
+                مشاهده کالکشن
               </button>
             </div>
           ) : (
-            /* 2-Column Desktop Checkout Layout (01-03 on Right, 04 on Left) */
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
-              
-              {/* Right Column: Sections 01, 02, 03 (7 cols) */}
+              {/* Steps 01–03 */}
               <div className="md:col-span-7 space-y-6">
-                
-                {/* 01 — Cart Review */}
+                {/* 01 — Cart items */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between pb-2 border-b border-[#E8DFD5]">
-                    <span className="text-xs font-bold text-[#2A2421] tracking-wide">
-                      ۰۱ — بررسی اقلام سبد خرید
-                    </span>
-                    <button
-                      onClick={onClearCart}
-                      className="text-[11px] text-[#A08875] hover:text-red-700 transition-colors cursor-pointer"
-                    >
-                      خالی کردن سبد
+                    <span className="text-xs font-bold text-[#2A2421]">۰۱ — اقلام سبد</span>
+                    <button onClick={onClearCart} className="text-[11px] text-[#A08875] hover:text-red-600 cursor-pointer">
+                      خالی کردن
                     </button>
                   </div>
-
-                  <div className="space-y-2.5">
+                  <div className="space-y-2">
                     {items.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between p-3 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] gap-3"
-                      >
-                        {/* 3:4 Thumbnail */}
-                        <img
-                          src={item.product.image}
-                          alt={item.product.title}
-                          className="w-14 h-18 object-cover rounded-lg border border-[#E8DFD5] shrink-0"
-                        />
-
-                        {/* Title and Specs */}
+                      <div key={item.id} className="flex items-center justify-between p-3 bg-[#FAF6F0] border border-[#E8DFD5] gap-3">
+                        <img src={item.product.image} alt={item.product.title} className="w-14 h-[72px] object-cover border border-[#E8DFD5] shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-xs sm:text-sm font-semibold text-[#2A2421] truncate">
-                            {item.product.title}
-                          </h4>
+                          <h4 className="text-xs font-semibold text-[#2A2421] truncate">{item.product.title}</h4>
                           <div className="text-[11px] text-[#786C65] mt-0.5">
-                            سایز: <strong className="text-[#2A2421] font-medium">{item.size}</strong> • رنگ: {item.color}
+                            سایز: <strong className="text-[#2A2421]">{item.size}</strong> • رنگ: {item.color}
                           </div>
                           <div className="text-xs font-bold text-[#2A2421] mt-1">
                             {formatTomans(item.product.price * item.quantity)}
                           </div>
                         </div>
-
-                        {/* Stepper & Remove */}
-                        <div className="flex flex-col items-end justify-between h-18 py-0.5 shrink-0">
-                          <button
-                            onClick={() => onRemoveItem(item.id)}
-                            className="text-[#978A7F] hover:text-red-600 transition-colors p-1 cursor-pointer"
-                            title="حذف از سبد"
-                            aria-label="حذف آیتم"
-                          >
+                        <div className="flex flex-col items-end justify-between h-[72px] py-0.5 shrink-0">
+                          <button onClick={() => onRemoveItem(item.id)} className="text-[#978A7F] hover:text-red-600 cursor-pointer p-1">
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
-
-                          <div className="flex items-center gap-1 bg-[#FFFFFF] border border-[#E8DFD5] px-2 py-0.5 rounded-full">
-                            <button
-                              onClick={() => onUpdateQuantity(item.id, -1)}
-                              className="text-[#2A2421] font-bold px-1 text-xs hover:text-[#A08875] cursor-pointer"
-                              aria-label="کاهش تعداد"
-                            >
-                              -
-                            </button>
-                            <span className="text-[11px] px-1 font-bold text-[#2A2421]">
-                              {toPersianDigits(item.quantity)}
-                            </span>
-                            <button
-                              onClick={() => onUpdateQuantity(item.id, 1)}
-                              className="text-[#2A2421] font-bold px-1 text-xs hover:text-[#A08875] cursor-pointer"
-                              aria-label="افزایش تعداد"
-                            >
-                              +
-                            </button>
+                          <div className="flex items-center gap-1 bg-white border border-[#E8DFD5] px-2 py-0.5">
+                            <button onClick={() => onUpdateQuantity(item.id, -1)} className="text-[#2A2421] font-bold px-1 text-xs cursor-pointer">-</button>
+                            <span className="text-[11px] px-1 font-bold text-[#2A2421]">{toPersianDigits(item.quantity)}</span>
+                            <button onClick={() => onUpdateQuantity(item.id, 1)} className="text-[#2A2421] font-bold px-1 text-xs cursor-pointer">+</button>
                           </div>
                         </div>
                       </div>
@@ -238,212 +165,135 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </div>
                 </div>
 
-                {/* 02 — Contact & Delivery */}
-                <div className="space-y-3 pt-2">
+                {/* 02 — Contact info */}
+                <div className="space-y-3">
                   <div className="pb-2 border-b border-[#E8DFD5]">
-                    <span className="text-xs font-bold text-[#2A2421] tracking-wide">
-                      ۰۲ — اطلاعات تماس و آدرس تحویل
-                    </span>
+                    <span className="text-xs font-bold text-[#2A2421]">۰۲ — اطلاعات تماس</span>
                   </div>
-
                   <div className="space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">
-                          نام و نام خانوادگی خریدار *
-                        </label>
+                        <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">نام و نام خانوادگی *</label>
                         <input
                           type="text"
-                          placeholder="مثال: مریم کریمی"
+                          placeholder="مریم کریمی"
                           value={customerData.fullName}
-                          onChange={(e) =>
-                            onCustomerDataChange({
-                              ...customerData,
-                              fullName: e.target.value,
-                            })
-                          }
-                          className="w-full h-10 px-3 rounded-lg bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] placeholder:text-[#978A7F]"
+                          onChange={(e) => onCustomerDataChange({ ...customerData, fullName: e.target.value })}
+                          className="w-full h-10 px-3 bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] placeholder:text-[#978A7F]"
                         />
                       </div>
-
                       <div>
-                        <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">
-                          شماره تماس همراه (دارای تلگرام) *
-                        </label>
+                        <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">شماره تماس *</label>
                         <input
                           type="tel"
                           dir="ltr"
                           placeholder="0912..."
                           value={customerData.phone}
-                          onChange={(e) =>
-                            onCustomerDataChange({
-                              ...customerData,
-                              phone: e.target.value,
-                            })
-                          }
-                          className="w-full h-10 px-3 rounded-lg bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] text-right placeholder:text-[#978A7F]"
+                          onChange={(e) => onCustomerDataChange({ ...customerData, phone: e.target.value })}
+                          className="w-full h-10 px-3 bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] text-right placeholder:text-[#978A7F]"
                         />
                       </div>
                     </div>
-
                     <div>
-                      <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">
-                        کد پستی ۱۰ رقمی (جهت ارسال بیمه‌شده)
-                      </label>
+                      <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">کد پستی</label>
                       <input
                         type="text"
                         dir="ltr"
                         placeholder="1987654321"
                         value={customerData.postalCode || ''}
-                        onChange={(e) =>
-                          onCustomerDataChange({
-                            ...customerData,
-                            postalCode: e.target.value,
-                          })
-                        }
-                        className="w-full h-10 px-3 rounded-lg bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] text-right placeholder:text-[#978A7F]"
+                        onChange={(e) => onCustomerDataChange({ ...customerData, postalCode: e.target.value })}
+                        className="w-full h-10 px-3 bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] text-right placeholder:text-[#978A7F]"
                       />
                     </div>
-
                     <div>
-                      <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">
-                        آدرس کامل پستی تحویل *
-                      </label>
+                      <label className="block text-[11px] text-[#6B5F58] mb-1 font-medium">آدرس تحویل *</label>
                       <textarea
                         rows={2}
-                        placeholder="استان، شهر، خیابان اصلی، کوچه، پلاک، واحد..."
+                        placeholder="استان، شهر، خیابان..."
                         value={customerData.address}
-                        onChange={(e) =>
-                          onCustomerDataChange({
-                            ...customerData,
-                            address: e.target.value,
-                          })
-                        }
-                        className="w-full p-2.5 rounded-lg bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] placeholder:text-[#978A7F] resize-none"
-                      ></textarea>
+                        onChange={(e) => onCustomerDataChange({ ...customerData, address: e.target.value })}
+                        className="w-full p-2.5 bg-[#FAF6F0] border border-[#E8DFD5] text-[#2A2421] text-xs focus:outline-none focus:border-[#2A2421] placeholder:text-[#978A7F] resize-none"
+                      />
                     </div>
                   </div>
                 </div>
 
-                {/* 03 — Payment Information Block */}
-                <div className="space-y-3 pt-2">
+                {/* 03 — Payment */}
+                <div className="space-y-3">
                   <div className="pb-2 border-b border-[#E8DFD5]">
-                    <span className="text-xs font-bold text-[#2A2421] tracking-wide">
-                      ۰۳ — پرداخت کارت‌به‌کارت
-                    </span>
+                    <span className="text-xs font-bold text-[#2A2421]">۰۳ — پرداخت کارت‌به‌کارت</span>
                   </div>
-
-                  <div className="p-4 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] space-y-2.5">
+                  <div className="p-4 bg-[#FAF6F0] border border-[#E8DFD5] space-y-2.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#6B5F58]">شماره حساب رسمی مزون ولا</span>
-                      <span className="font-bold text-[#2A2421]">{BANK_CARD_DETAILS.bankName}</span>
+                      <span className="text-[#6B5F58]">حساب رسمی مزون</span>
+                      <span className="font-semibold text-[#2A2421]">{BANK_CARD_DETAILS.bankName}</span>
                     </div>
-
-                    <div className="flex items-center justify-between bg-[#FFFFFF] p-2.5 rounded-lg border border-[#E8DFD5]">
-                      <span
-                        className="font-mono text-xs sm:text-sm font-bold text-[#2A2421] tracking-wider"
-                        dir="ltr"
-                      >
+                    <div className="flex items-center justify-between bg-white p-2.5 border border-[#E8DFD5]">
+                      <span className="font-mono text-xs sm:text-sm font-bold text-[#2A2421] tracking-wider" dir="ltr">
                         {BANK_CARD_DETAILS.cardNumber}
                       </span>
                       <button
                         onClick={handleCopyCard}
-                        className="flex items-center gap-1 text-[11px] bg-[#2A2421] text-[#FAF6F0] px-3 py-1 rounded-full hover:bg-[#140F0D] transition-colors active:scale-95 cursor-pointer"
+                        className="flex items-center gap-1 text-[11px] bg-[#2A2421] text-white px-3 py-1 hover:bg-[#1a1715] cursor-pointer"
                       >
                         {copied ? (
-                          <>
-                            <Check className="w-3 h-3 text-emerald-400" />
-                            <span>کپی شد</span>
-                          </>
+                          <><Check className="w-3 h-3 text-emerald-400" /><span>کپی شد</span></>
                         ) : (
-                          <>
-                            <Copy className="w-3 h-3" />
-                            <span>کپی شماره کارت</span>
-                          </>
+                          <><Copy className="w-3 h-3" /><span>کپی</span></>
                         )}
                       </button>
                     </div>
-
-                    <div className="text-[11px] text-[#786C65] leading-relaxed">
+                    <div className="text-[11px] text-[#786C65]">
                       به نام: <strong className="text-[#2A2421]">{BANK_CARD_DETAILS.accountHolder}</strong>
-                      <span className="block mt-0.5 text-[10.5px]">
-                        دستورالعمل: پس از واریز مبلغ، تصویر فیش پرداخت را در تلگرام مشاور مزون ارسال فرمایید.
+                      <span className="block mt-0.5 text-[10px]">
+                        پس از واریز، فیش را در تلگرام ارسال فرمایید.
                       </span>
                     </div>
                   </div>
                 </div>
-
               </div>
 
-              {/* Left Column: Section 04 - Sticky Final Order Summary (5 cols) */}
+              {/* 04 — Summary sidebar */}
               <div className="md:col-span-5 md:sticky md:top-0 space-y-4">
-                <div className="p-5 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] space-y-4 shadow-xs">
+                <div className="p-5 bg-[#FAF6F0] border border-[#E8DFD5] space-y-4">
                   <div className="pb-2 border-b border-[#E8DFD5]">
-                    <span className="text-xs font-bold text-[#2A2421] tracking-wide">
-                      ۰۴ — خلاصه فاکتور و تایید
-                    </span>
+                    <span className="text-xs font-bold text-[#2A2421]">۰۴ — خلاصه فاکتور</span>
                   </div>
 
-                  {/* Summary Breakdown */}
-                  <div className="space-y-2.5 text-xs text-[#6B5F58]">
+                  <div className="space-y-2 text-xs text-[#6B5F58]">
                     <div className="flex justify-between">
-                      <span>مجموع ارزش اقلام ({toPersianDigits(items.length)} قلم):</span>
+                      <span>اقلام ({toPersianDigits(items.length)} قلم)</span>
                       <span className="text-[#2A2421] font-semibold">{formatTomans(totalPrice)}</span>
                     </div>
-
                     <div className="flex justify-between">
-                      <span>بسته‌بندی نفیس و ارسال بیمه‌شده:</span>
-                      <span className="text-emerald-700 font-medium">رایگان (کپسول ویژه)</span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span>مالیات و خدمات مزون:</span>
-                      <span className="text-[#2A2421] font-medium">محاسبه‌شده</span>
+                      <span>ارسال بیمه‌شده</span>
+                      <span className="text-emerald-700 font-medium">رایگان</span>
                     </div>
                   </div>
 
-                  {/* Visually Dominant Final Total */}
                   <div className="pt-3 border-t border-[#E8DFD5] flex items-baseline justify-between">
-                    <span className="text-xs sm:text-sm font-bold text-[#2A2421]">
-                      مبلغ نهایی قابل واریز:
-                    </span>
-                    <span className="text-lg sm:text-xl font-bold text-[#2A2421]">
-                      {formatTomans(totalPrice)}
-                    </span>
+                    <span className="text-sm font-bold text-[#2A2421]">مبلغ نهایی</span>
+                    <span className="text-lg font-bold text-[#2A2421]">{formatTomans(totalPrice)}</span>
                   </div>
 
-                  {/* Primary Dominant CTA */}
-                  <div className="pt-2 space-y-2">
-                    <button
-                      onClick={handleSubmitTelegramOrder}
-                      className="w-full py-3.5 px-6 rounded-full bg-[#2A2421] text-[#FAF6F0] hover:bg-[#140F0D] transition-all flex items-center justify-center gap-2 shadow-md group active:scale-95 cursor-pointer skip-delay"
-                      id="submit-telegram-order-btn"
-                    >
-                      <Send className="w-4 h-4 text-[#D4C5B9] group-hover:-translate-y-0.5 transition-transform" />
-                      <span className="text-xs sm:text-sm font-medium tracking-wide">
-                        تایید سفارش و ارسال فیش در تلگرام
-                      </span>
-                    </button>
+                  <button
+                    onClick={handleSubmitTelegramOrder}
+                    className="w-full py-3.5 px-6 bg-[#2A2421] text-white hover:bg-[#1a1715] flex items-center justify-center gap-2 cursor-pointer"
+                    id="submit-telegram-order-btn"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span className="text-sm font-medium">ثبت سفارش در تلگرام</span>
+                  </button>
 
-                    <p className="text-center text-[10px] text-[#786C65] leading-normal px-2">
-                      اتصال مستقیم به مشاور اختصاصی مزون (@velalabel) جهت ثبت قطعی دوخت و تایید فیش
-                    </p>
-                  </div>
-                </div>
-
-                {/* Safe & Insured Guarantee */}
-                <div className="p-3 bg-[#FFFFFF] rounded-xl border border-[#E8DFD5] text-[10.5px] text-[#786C65] space-y-1">
-                  <div className="font-semibold text-[#2A2421]">ضمانت تحویل و تطابق سایز آتلیه ولا:</div>
-                  <div>کلیه سفارش‌ها با کاور محافظ نفیس مزون و بیمه سلامت ارسال می‌گردند.</div>
+                  <p className="text-center text-[10px] text-[#786C65] px-2">
+                    اتصال به مشاور مزون @velalabel
+                  </p>
                 </div>
               </div>
-
             </div>
           )}
         </div>
-
       </div>
-
     </div>
   );
 };

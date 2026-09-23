@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, Sparkles, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { ToastData } from '../types';
 
 interface ToastProps {
@@ -11,20 +11,16 @@ export const Toast: React.FC<ToastProps> = ({ toasts, onDismiss }) => {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-full max-w-sm px-4">
+    <div className="fixed bottom-6 right-6 z-[60] flex flex-col gap-2 select-none">
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className="pointer-events-auto bg-[#2A2421] text-[#FAF6F0] px-5 py-2.5 rounded-full shadow-2xl flex items-center justify-between gap-3 border border-white/10 animate-fade-in w-auto max-w-full"
+          className="flex items-center gap-3 bg-[#2A2421] text-[#FAF6F0] px-4 py-3 shadow-lg text-xs font-medium animate-fade-in max-w-xs"
         >
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-[#D4C5B9] shrink-0" />
-            <span className="text-xs font-medium">{toast.message}</span>
-          </div>
+          <span className="flex-1">{toast.message}</span>
           <button
             onClick={() => onDismiss(toast.id)}
-            className="text-[#978A7F] hover:text-white p-0.5"
-            aria-label="بستن اعلان"
+            className="text-[#D4C5B9] hover:text-white shrink-0 cursor-pointer"
           >
             <X className="w-3 h-3" />
           </button>

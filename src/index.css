@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* High-Quality Persian Fonts: Official Estedad Webfonts */
+/* ─── Estedad Webfonts (400–700) ─── */
 @font-face {
   font-family: 'Estedad';
   src: url('https://cdn.jsdelivr.net/gh/aminabedi68/Estedad@master/fonts/webfonts/Estedad-Regular.woff2') format('woff2');
@@ -33,7 +33,7 @@
   font-display: swap;
 }
 
-/* Fallback: Vazirmatn Clean Webfont */
+/* Vazirmatn fallback */
 @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css');
 
 @theme {
@@ -41,7 +41,6 @@
   --font-display: "Estedad", "Vazirmatn", sans-serif;
   --font-brand: "Italiana", "Cormorant Garamond", Georgia, serif;
   --font-serif: "Italiana", "Cormorant Garamond", serif;
-  --font-accent: "Italiana", "Cormorant Garamond", serif;
 
   --color-canvas: #F5F0EB;
   --color-surface: #FAF6F0;
@@ -66,18 +65,18 @@
     background-color: #F5F0EB;
     color: #2A2421;
     overflow-x: hidden;
-    line-height: 1.6;
+    line-height: 1.7;
     letter-spacing: 0;
   }
 
-  /* Prevent letter-spacing distortion on Persian scripts */
-  h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select {
+  /* Force zero letter-spacing on all Persian text */
+  h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, li {
     letter-spacing: 0;
   }
 
-  /* Retain tracking only for explicit uppercase Latin codes/labels */
+  /* Allow tracking only on explicit LTR Latin labels */
   [dir="ltr"], .tracking-latin {
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
   }
 
   * {
@@ -86,82 +85,49 @@
   }
 }
 
-/* Custom minimal scrollbar */
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-::-webkit-scrollbar-track {
-  background: #F5F0EB;
-}
-::-webkit-scrollbar-thumb {
-  background: #D4C5B9;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #A08875;
-}
+/* ─── Minimal Scrollbar ─── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D4C5B9; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #A08875; }
 
-/* Hide scrollbar utility */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Skeleton Loading Shimmer Effect */
+/* ─── Skeleton Shimmer ─── */
 @keyframes luxuryShimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    #EDE6DE 0%,
-    #F8F3ED 50%,
-    #EDE6DE 100%
-  );
+  background: linear-gradient(90deg, #EDE6DE 0%, #F8F3ED 50%, #EDE6DE 100%);
   background-size: 200% 100%;
   animation: luxuryShimmer 1.8s ease-in-out infinite;
 }
 
-/* Stagger Entrance Animation */
+/* ─── Stagger Entrance ─── */
 @keyframes staggerFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .stagger-item {
-  animation: staggerFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: staggerFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Cross-fade Micro-interactions */
-.crossfade-icon {
-  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+/* ─── Fade In for modals ─── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* Skip-Delay Instant Feel for Buttons */
-.skip-delay {
-  transition-duration: 120ms !important;
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
 }
 
-/* Subtle Hover Image Swap for Editorial Product Cards */
-.image-swap-primary {
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* ─── Image crossfade ─── */
+.image-swap-primary,
 .image-swap-secondary {
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
