@@ -40,6 +40,7 @@ export const PRODUCTS: Product[] = [
     image: '/products/vla-st-002.webp',
     gallery: [
       '/products/vla-st-002.webp',
+      '/products/vla-st-003.webp',
     ],
     fabric: 'پارچه بافت‌دار پاییزه ترک',
     origin: 'آتلیه تخصصی ولا • تهران',
@@ -66,10 +67,10 @@ export const PRODUCTS: Product[] = [
     priceFormatted: '۳,۸۵۰,۰۰۰ تومان',
     badge: 'پرفروش‌ترین آتلیه',
     badgeType: 'new',
-    image: '/products/vla-adl-001.webp',
+    image: '/products/vla-adl-002.webp',
     gallery: [
-      '/products/vla-adl-001.webp',
-      '/products/vla-lrn-001.webp'
+      '/products/vla-adl-002.webp',
+      '/products/vla-adl-001.webp'
     ],
     fabric: 'کرپ مازراتی درجه یک وارداتی',
     origin: 'آتلیه تخصصی ولا • تهران',
@@ -96,10 +97,10 @@ export const PRODUCTS: Product[] = [
     priceFormatted: '۳,۹۵۰,۰۰۰ تومان',
     badge: 'جدیدترین دوخت',
     badgeType: 'new',
-    image: '/products/vla-lrn-001.webp',
+    image: '/products/vla-lrn-002.webp',
     gallery: [
-      '/products/vla-lrn-001.webp',
-      '/products/vla-adl-001.webp'
+      '/products/vla-lrn-002.webp',
+      '/products/vla-lrn-001.webp'
     ],
     fabric: 'فاستونی کش کتی اعلا',
     origin: 'آتلیه تخصصی ولا • تهران',

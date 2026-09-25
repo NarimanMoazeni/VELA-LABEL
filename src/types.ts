@@ -8,7 +8,7 @@ export interface Product {
   id: string;
   code: string;
   title: string;
-  category: 'all' | 'blazer' | 'coat' | 'silk' | 'trousers';
+  category: 'all' | 'blazer' | 'coat' | 'silk' | 'trousers' | 'set' | 'bespoke';
   categoryLabel: string;
   price: number;
   priceFormatted: string;

@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
-/* ─── Estedad Webfonts (400–700) ─── */
+/* Class-based dark mode (toggled via .dark on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+/* High-Quality Persian Fonts: Official Estedad Webfonts */
 @font-face {
   font-family: 'Estedad';
   src: url('https://cdn.jsdelivr.net/gh/aminabedi68/Estedad@master/fonts/webfonts/Estedad-Regular.woff2') format('woff2');
@@ -33,14 +43,15 @@
   font-display: swap;
 }
 
-/* Vazirmatn fallback */
-@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/misc/Farsi-Digits/Vazirmatn-FD-font-face.css');
+/* Fallback: Vazirmatn is loaded via index.html (Google Fonts) to keep @import order valid.
+   Estedad (400/500/600/700) is primary; Vazirmatn is fallback only. */
 
 @theme {
   --font-sans: "Estedad", "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: "Estedad", "Vazirmatn", sans-serif;
-  --font-brand: "Italiana", "Cormorant Garamond", Georgia, serif;
-  --font-serif: "Italiana", "Cormorant Garamond", serif;
+  --font-brand: "Italiana", Georgia, serif;
+  --font-serif: "Italiana", Georgia, serif;
+  --font-accent: "Italiana", Georgia, serif;
 
   --color-canvas: #F5F0EB;
   --color-surface: #FAF6F0;
@@ -65,18 +76,18 @@
     background-color: #F5F0EB;
     color: #2A2421;
     overflow-x: hidden;
-    line-height: 1.7;
+    line-height: 1.6;
     letter-spacing: 0;
   }
 
-  /* Force zero letter-spacing on all Persian text */
-  h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select, label, li {
+  /* Prevent letter-spacing distortion on Persian scripts */
+  h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, select {
     letter-spacing: 0;
   }
 
-  /* Allow tracking only on explicit LTR Latin labels */
+  /* Retain tracking only for explicit uppercase Latin codes/labels */
   [dir="ltr"], .tracking-latin {
-    letter-spacing: 0.12em;
+    letter-spacing: 0.15em;
   }
 
   * {
@@ -85,49 +96,334 @@
   }
 }
 
-/* ─── Minimal Scrollbar ─── */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #D4C5B9; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #A08875; }
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F0EB;
+}
+::-webkit-scrollbar-thumb {
+  background: #D4C5B9;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A08875;
+}
 
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
-/* ─── Skeleton Shimmer ─── */
+/* Skeleton Loading Shimmer Effect */
 @keyframes luxuryShimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .skeleton-shimmer {
-  background: linear-gradient(90deg, #EDE6DE 0%, #F8F3ED 50%, #EDE6DE 100%);
+  background: linear-gradient(
+    90deg,
+    #EDE6DE 0%,
+    #F8F3ED 50%,
+    #EDE6DE 100%
+  );
   background-size: 200% 100%;
   animation: luxuryShimmer 1.8s ease-in-out infinite;
 }
 
-/* ─── Stagger Entrance ─── */
+/* Stagger Entrance Animation */
 @keyframes staggerFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .stagger-item {
-  animation: staggerFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: staggerFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ─── Fade In for modals ─── */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Cross-fade Micro-interactions */
+.crossfade-icon {
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.2s ease-out;
+/* Skip-Delay Instant Feel for Buttons */
+.skip-delay {
+  transition-duration: 120ms !important;
 }
 
-/* ─── Image crossfade ─── */
-.image-swap-primary,
+/* Subtle Hover Image Swap for Editorial Product Cards */
+.image-swap-primary {
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .image-swap-secondary {
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Accessibility: visible keyboard focus (never remove outline without replacement) */
+:focus-visible {
+  outline: 2px solid #A08875;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Respect reduced motion for hero crossfade and stagger */
+@media (prefers-reduced-motion: reduce) {
+  .stagger-item {
+    animation: none;
+  }
+  .skeleton-shimmer {
+    animation: none;
+  }
+  .animate-cart-bump,
+  .animate-fade-in,
+  .animate-pop,
+  .animate-float,
+  .animate-float-delayed,
+  .hero-in-next,
+  .hero-out-next,
+  .hero-in-prev,
+  .hero-out-prev,
+  .hero-first {
+    animation: none;
+  }
+  .hero-layer {
+    transform: none !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================================
+   LUXE DARK MODE — warm espresso + champagne bronze
+   Unlayered rules win over Tailwind layered utilities.
+   ============================================================ */
+.dark,
+.dark body {
+  background-color: #141110;
+  color: #f2e9dc;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #141110;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #4a3f33;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #d6b78f;
+}
+.dark ::selection {
+  background: #4a3a28;
+  color: #f6eee1;
+}
+
+/* Surfaces */
+.dark .bg-\[\#F5F0EB\] { background-color: #141110; }
+/* Sticky bars use the /95 variant when scrolled — must be overridden too */
+.dark .bg-\[\#F5F0EB\]\/95 { background-color: rgba(20, 17, 16, 0.95); }
+.dark .bg-\[\#FAF6F0\] { background-color: #1e1813; }
+.dark .bg-\[\#FFFFFF\] { background-color: #231c17; }
+.dark .bg-white { background-color: #231c17; }
+.dark .bg-\[\#FAF6F0\]\/60 { background-color: rgba(30, 24, 19, 0.9); }
+.dark .bg-\[\#FAF6F0\]\/90 { background-color: rgba(30, 24, 19, 0.94); }
+.dark .bg-\[\#EDE6DE\] { background-color: #2b231b; }
+.dark .bg-\[\#F2ECE4\] { background-color: #272019; }
+.dark .bg-\[\#EAE4D7\] { background-color: #2a231b; }
+.dark .bg-\[\#E8DFD5\] { background-color: #33291f; }
+.dark .bg-\[\#2A2421\] { background-color: #0f0c0a; }
+.dark .bg-\[\#2A2421\]\/90 { background-color: rgba(15, 12, 10, 0.92); }
+.dark .bg-\[\#2A2421\]\/85 { background-color: rgba(15, 12, 10, 0.88); }
+.dark .bg-\[\#A08875\] { background-color: #b99a76; }
+
+/* Text */
+.dark .text-\[\#2A2421\] { color: #f2e9dc; }
+.dark .text-\[\#1C1917\] { color: #f6eee1; }
+.dark .text-\[\#6B5F58\] { color: #ccbda7; }
+.dark .text-\[\#786C65\] { color: #c0af9a; }
+.dark .text-\[\#8E827A\] { color: #ac9d8a; }
+.dark .text-\[\#5A504B\] { color: #d5c5b2; }
+.dark .text-\[\#978A7F\] { color: #a1907f; }
+.dark .text-\[\#A08875\] { color: #d7b98f; }
+.dark .text-emerald-700 { color: #6ee7b7; }
+.dark .placeholder\:text-\[\#978A7F\]::placeholder { color: #84735f; }
+
+/* Borders */
+.dark .border-\[\#E8DFD5\] { border-color: #3b322a; }
+.dark .border-\[\#E8DFD5\]\/80 { border-color: rgba(59, 50, 42, 0.8); }
+.dark .border-\[\#E8DFD5\]\/60 { border-color: rgba(59, 50, 42, 0.6); }
+.dark .border-\[\#E8DFD5\]\/70 { border-color: rgba(59, 50, 42, 0.7); }
+.dark .border-\[\#D4C5B9\] { border-color: #584a3c; }
+.dark .border-\[\#D4C5B9\]\/60 { border-color: rgba(88, 74, 60, 0.6); }
+.dark .border-\[\#A08875\] { border-color: #8a6f52; }
+.dark .border-\[\#2A2421\] { border-color: #d7b98f; }
+.dark .ring-\[\#2A2421\]\/20 { --tw-ring-color: rgb(215 185 143 / 0.35); }
+
+/* Interactive states */
+.dark .hover\:bg-\[\#FAF6F0\]:hover { background-color: #2a221b; }
+.dark .hover\:bg-\[\#E8DFD5\]:hover { background-color: #33291f; }
+.dark .hover\:bg-\[\#140F0D\]:hover { background-color: #000000; }
+.dark .hover\:text-\[\#2A2421\]:hover { color: #f2e9dc; }
+.dark .hover\:border-\[\#2A2421\]:hover { border-color: #d7b98f; }
+.dark .hover\:text-\[\#A08875\]:hover { color: #e4c89d; }
+.dark .focus\:border-\[\#2A2421\]:focus { border-color: #d7b98f; }
+.dark .group:hover .group-hover\:text-\[\#A08875\] { color: #e4c89d; }
+.dark .group:hover .group-hover\:bg-\[\#2A2421\] { background-color: #0e0b09; }
+.dark .group:hover .group-hover\:text-\[\#FAF6F0\] { color: #f2e9dc; }
+
+/* Feedback tones on dark */
+.dark .hover\:text-red-600:hover { color: #f87171; }
+
+/* Media + skeleton in dark */
+.dark img { filter: brightness(0.96); }
+.dark .skeleton-shimmer {
+  background: linear-gradient(90deg, #241d16 0%, #2f251c 50%, #241d16 100%);
+  background-size: 200% 100%;
+}
+/* Translucent white pills keep contrast in dark */
+.dark .bg-\[\#FFFFFF\]\/90 { background-color: rgba(35, 28, 23, 0.94); }
+.dark .border-\[\#E8DFD5\]\/40 { border-color: rgba(59, 50, 42, 0.4); }
+.dark .text-red-600 { color: #f87171; }
+
+/* Theme-switch transition (toggled briefly on <html> by the header) */
+.theme-fade,
+.theme-fade *,
+.theme-fade *::before,
+.theme-fade *::after {
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.25s ease !important;
+}
+
+/* Subtle luxe glow at the top of the page in dark mode */
+.dark body {
+  background-image: radial-gradient(70% 420px at 50% -80px, rgba(214, 183, 143, 0.12), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+/* Shop-feel motion: cart bump, toast rise, modal pop */
+@keyframes cart-bump {  0% { transform: scale(1); }
+  30% { transform: scale(1.18) rotate(-5deg); }
+  60% { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+.animate-cart-bump {
+  animation: cart-bump 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-fade-in {
+  animation: fade-up 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.animate-pop {
+  animation: pop-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Mobile polish */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+/* Prevent iOS auto-zoom on focus */
+@media (max-width: 640px) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* Buttery theme switch: circular reveal driven by View Transitions API */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 0;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* Gentle float for hero glass chips (outer span handles parallax) */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float-soft 5s ease-in-out infinite;
+}
+.animate-float-delayed {
+  animation: float-soft 6.5s ease-in-out 1.2s infinite;
+}
+
+/* Scroll-triggered stagger reveal (driven by Reveal component) */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero 3D slide transitions — soft rotary pass, direction-aware (RTL: next flows left) */
+.hero-layer {
+  transition:
+    opacity 0.75s ease,
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+@keyframes hero-in-next {
+  from { opacity: 0; transform: perspective(1000px) rotateY(-26deg) translateX(-70px) scale(0.96); }
+  to { opacity: 1; transform: perspective(1000px) rotateY(0deg) translateX(0) scale(1); }
+}
+@keyframes hero-out-next {
+  from { opacity: 1; transform: perspective(1000px) rotateY(0deg) translateX(0) scale(1); }
+  to { opacity: 0; transform: perspective(1000px) rotateY(22deg) translateX(60px) scale(0.97); }
+}
+@keyframes hero-in-prev {
+  from { opacity: 0; transform: perspective(1000px) rotateY(26deg) translateX(70px) scale(0.96); }
+  to { opacity: 1; transform: perspective(1000px) rotateY(0deg) translateX(0) scale(1); }
+}
+@keyframes hero-out-prev {
+  from { opacity: 1; transform: perspective(1000px) rotateY(0deg) translateX(0) scale(1); }
+  to { opacity: 0; transform: perspective(1000px) rotateY(-22deg) translateX(-60px) scale(0.97); }
+}
+@keyframes hero-first {
+  from { opacity: 0; transform: perspective(1000px) rotateY(-10deg) scale(0.985); }
+  to { opacity: 1; transform: perspective(1000px) rotateY(0deg) scale(1); }
+}
+.hero-in-next { animation: hero-in-next 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-out-next { animation: hero-out-next 0.65s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-in-prev { animation: hero-in-prev 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-out-prev { animation: hero-out-prev 0.65s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.hero-first { animation: hero-first 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
