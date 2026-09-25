@@ -37,7 +37,7 @@ export const AtelierPhilosophy: React.FC = () => {
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-10 space-y-1.5">
           <span 
-            className="text-[9.5px] text-[#A08875] tracking-[0.22em] uppercase font-serif font-semibold block"
+            className="font-latin text-[10px] sm:text-[11px] text-[#8A715D] dark:text-[#E5CCA8] tracking-[0.2em] uppercase font-bold block"
             dir="ltr"
           >
             ATELIER CRAFTSMANSHIP • VELA LABEL

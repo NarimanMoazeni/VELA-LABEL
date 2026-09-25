@@ -33,7 +33,7 @@ export const WhyVela: React.FC = () => {
         {/* Section Heading matching Reference 8 */}
         <div className="text-center max-w-xl mx-auto mb-8 space-y-1.5">
           <span
-            className="text-[9.5px] text-[#A08875] font-serif font-medium tracking-[0.2em] uppercase"
+            className="font-latin text-[10.5px] sm:text-[11.5px] text-[#8A715D] dark:text-[#E5CCA8] font-bold tracking-[0.2em] uppercase inline-block"
             dir="ltr"
           >
             WHY CHOOSE VELA LABEL

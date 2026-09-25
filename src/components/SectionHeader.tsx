@@ -31,7 +31,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
         <div className="text-center px-2 space-y-1">
           {englishLabel && (
             <span
-              className="text-[9.5px] text-[#A08875] uppercase font-serif font-medium tracking-[0.22em] block"
+              className="font-latin text-[10px] sm:text-[11px] text-[#8A715D] dark:text-[#E5CCA8] uppercase font-bold tracking-[0.2em] block"
               dir="ltr"
             >
               {englishLabel}

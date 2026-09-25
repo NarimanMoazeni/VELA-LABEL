@@ -193,7 +193,7 @@ export const Header: React.FC<HeaderProps> = ({
               VELA
             </span>
             <span
-              className="text-[8.5px] sm:text-[9px] uppercase text-[#A08875] font-sans font-medium tracking-[0.24em] mt-1"
+              className="font-latin text-[9px] sm:text-[9.5px] uppercase text-[#8A715D] dark:text-[#E5CCA8] font-bold tracking-[0.22em] mt-1"
               dir="ltr"
             >
               ATELIER • ISFAHAN
@@ -296,7 +296,7 @@ export const Header: React.FC<HeaderProps> = ({
                   />
                   <div className="flex flex-col text-right">
                     <span className="font-serif text-base text-[#2A2421] font-bold">VELA LABEL</span>
-                    <span className="text-[8px] text-[#A08875] tracking-wider uppercase">ATELIER ISFAHAN</span>
+                    <span className="font-latin text-[8.5px] text-[#8A715D] dark:text-[#E5CCA8] tracking-[0.2em] uppercase font-bold">ATELIER ISFAHAN</span>
                   </div>
                 </div>
                 <button

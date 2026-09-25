@@ -19,7 +19,7 @@ export const BespokeBanner: React.FC<BespokeBannerProps> = () => {
           {/* Main Copy */}
           <div className="lg:col-span-8 space-y-3.5">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-[#D4C5B9] uppercase tracking-[0.2em] font-serif font-semibold">
+              <span className="font-latin text-[10.5px] sm:text-[11px] text-[#E5CCA8] uppercase tracking-[0.18em] font-bold">
                 ATELIER CONCIERGE & SIZING ✦
               </span>
             </div>

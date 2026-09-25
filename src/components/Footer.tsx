@@ -25,7 +25,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
                 <span className="font-serif text-lg tracking-wider text-[#2A2421] font-bold uppercase">
                   VELA LABEL
                 </span>
-                <span className="text-[8px] uppercase text-[#A08875] tracking-widest font-sans font-medium">
+                <span className="font-latin text-[8.5px] uppercase text-[#8A715D] dark:text-[#E5CCA8] tracking-[0.22em] font-bold">
                   WOMEN'S WEAR • ATELIER
                 </span>
               </div>

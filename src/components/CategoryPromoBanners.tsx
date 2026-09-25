@@ -46,14 +46,14 @@ export const CategoryPromoBanners: React.FC<CategoryPromoBannersProps> = ({
             {/* Content Side */}
             <div className="flex-1 flex flex-col justify-between space-y-3 z-10">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <span
-                    className="text-[9.5px] uppercase font-serif text-[#A08875] tracking-[0.2em] font-medium"
+                    className="font-latin text-[10.5px] sm:text-[11px] uppercase text-[#8A715D] dark:text-[#E5CCA8] font-bold tracking-[0.18em]"
                     dir="ltr"
                   >
                     {item.tag}
                   </span>
-                  <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#FFFFFF]/90 text-[#2A2421] border border-[#E8DFD5] font-semibold">
+                  <span className="text-[9.5px] px-2.5 py-0.5 rounded-full bg-[#FFFFFF]/90 dark:bg-[#2A2421]/90 text-[#2A2421] dark:text-[#F2E9DC] border border-[#E8DFD5] dark:border-white/15 font-semibold">
                     {item.badge}
                   </span>
                 </div>

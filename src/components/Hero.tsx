@@ -234,9 +234,8 @@ export const Hero: React.FC<HeroProps> = ({
             {/* Top Campaign Season Tag */}
             <div className="absolute top-0 inset-x-0 p-5 flex items-center justify-center z-30 pointer-events-none">
               <span
-                className="text-[10px] text-[#FAF6F0] tracking-[0.24em] uppercase font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
+                className="text-[11px] sm:text-xs text-[#FAF6F0] tracking-[0.22em] uppercase font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] font-latin"
                 dir="ltr"
-                style={{ fontFamily: 'Italiana, serif' }}
               >
                 AUTUMN / WINTER 2026
               </span>
@@ -341,12 +340,12 @@ export const Hero: React.FC<HeroProps> = ({
                 </span>
               )}
               <span className="absolute top-1/3 -left-2 sm:-left-5 animate-float-delayed">
-                <span className="inline-block text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-[#FAF6F0]/92 backdrop-blur-md text-[#2A2421] border border-[#E8DFD5] shadow-xl">
+                <span className="inline-block text-[11.5px] font-bold px-4 py-2 rounded-full bg-[#FAF6F0] dark:bg-[#1E1813] backdrop-blur-md text-[#2A2421] dark:text-[#F2E9DC] border border-[#E8DFD5] dark:border-[#584A3C] shadow-xl">
                   {current.product.fabric}
                 </span>
               </span>
               <span className="absolute -bottom-5 left-6 sm:left-10 animate-float">
-                <span className="inline-block text-sm font-extrabold px-5 py-2 rounded-full bg-[#FAF6F0] text-[#2A2421] border border-[#E8DFD5] shadow-2xl">
+                <span className="inline-block text-sm font-extrabold px-5 py-2.5 rounded-full bg-[#FAF6F0] dark:bg-[#1E1813] text-[#2A2421] dark:text-[#F2E9DC] border border-[#E8DFD5] dark:border-[#584A3C] shadow-2xl">
                   {current.product.priceFormatted}
                 </span>
               </span>
