@@ -58,7 +58,7 @@ export const BespokeBanner: React.FC<BespokeBannerProps> = () => {
                 <span className="text-xs font-semibold">خدمات پرو اختصاصی</span>
               </div>
               <p className="text-[11px] sm:text-xs text-[#E5D7CA] leading-relaxed">
-                امکان هماهنگی جهت پرو حضوری در آتلیه تهران و تحویل در بسته‌بندی نفیس مزونی
+                امکان هماهنگی جهت پرو حضوری در آتلیه اصفهان و تحویل در بسته‌بندی نفیس مزونی
               </p>
               <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10.5px] text-[#D4C5B9]">
                 <span>پشتیبانی سفارشات</span>

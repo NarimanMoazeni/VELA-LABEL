@@ -7,7 +7,7 @@ export const WhyVela: React.FC = () => {
     {
       icon: Award,
       title: 'دوخت و پارچه درجه‌یک',
-      description: 'دوخت تمیز در آتلیه تهران با پارچه بدون چروک و بدون آبرفت.',
+      description: 'دوخت تمیز در آتلیه اصفهان با پارچه بدون چروک و بدون آبرفت.',
     },
     {
       icon: MessagesSquare,
@@ -22,7 +22,7 @@ export const WhyVela: React.FC = () => {
     {
       icon: Ruler,
       title: 'تنظیم قد و سایز',
-      description: 'سفارشی‌سازی اندازه و پرو حضوری در آتلیه تهران.',
+      description: 'سفارشی‌سازی اندازه و پرو حضوری در آتلیه اصفهان.',
     },
   ];
 

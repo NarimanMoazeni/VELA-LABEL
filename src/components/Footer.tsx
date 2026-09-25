@@ -31,7 +31,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
               </div>
             </div>
             <p className="text-sm text-[#786C65] leading-relaxed">
-              مزون پوشاک زنانه ولا؛ کت و ست با دوخت تمیز در تهران.
+              مزون پوشاک زنانه ولا؛ کت و ست با دوخت تمیز در اصفهان.
             </p>
           </div>
 
@@ -87,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
             <ul className="space-y-2.5 text-sm text-[#786C65]">
               <li>ارسال به سراسر کشور با کاور اختصاصی</li>
               <li>تنظیم قد و سایز قبل از ارسال</li>
-              <li>پرو حضوری در آتلیه تهران</li>
+              <li>پرو حضوری در آتلیه اصفهان</li>
               <li>پشتیبانی ۱۰ صبح تا ۸ شب</li>
             </ul>
           </div>
@@ -130,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory }) => {
             © ۲۰۲۶ مزون زنانه VELA LABEL • تمامی حقوق محفوظ است.
           </div>
           <div className="flex items-center gap-3">
-            <span>طراحی و دوخت مزونی در تهران</span>
+            <span>طراحی و دوخت مزونی در اصفهان</span>
             <span>✦</span>
             <span>ارسال ایمن و بیمه‌شده</span>
           </div>
