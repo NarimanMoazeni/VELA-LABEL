@@ -8,8 +8,7 @@ import { SectionHeader } from './components/SectionHeader';
 import { CategoryFilterBar } from './components/CategoryFilterBar';
 import { ProductCard } from './components/ProductCard';
 import { ProductSkeleton } from './components/ProductSkeleton';
-import { AtelierPhilosophy } from './components/AtelierPhilosophy';
-import { BespokeBanner } from './components/BespokeBanner';
+import { WaveDivider } from './components/WaveDivider';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import { Reveal } from './components/Reveal';
@@ -145,7 +144,7 @@ export default function App() {
   // 'bespoke' has no products — it scrolls to the atelier banner instead.
   const handleCategorySelect = (cat: string) => {
     if (cat === 'bespoke') {
-      const el = document.getElementById('bespoke-appointment');
+      const el = document.getElementById('why-vela-section');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
@@ -303,17 +302,13 @@ export default function App() {
           featuredProducts={PRODUCTS.slice(0, 3)}
         />
 
-        {/* 3. Category discovery banners (single visual entry to the catalog) */}
-        <Reveal>
-          <CategoryPromoBanners onSelectCategory={handleCategorySelect} />
-        </Reveal>
+        {/* 3. Service / Trust Indicators + Category Showcase Cards (Primary Visual Navigation) */}
+        <CategoryPromoBanners
+          selectedCategory={selectedCategory}
+          onSelectCategory={handleCategorySelect}
+        />
 
-        {/* 5. Why VELA / Benefits & Trust Section */}
-        <Reveal>
-          <WhyVela />
-        </Reveal>
-
-        {/* 6. Main Catalog & New Arrivals */}
+        {/* 4. Main Catalog & Products (Directly follows Category Cards) */}
         <section id="catalog-section" className="w-full scroll-mt-[100px] sm:scroll-mt-[118px]">
           
           {/* Section Heading with subtle divider */}
@@ -398,26 +393,24 @@ export default function App() {
 
         </section>
 
-        {/* 7. Atelier Craftsmanship Philosophy */}
-        <Reveal>
-          <AtelierPhilosophy />
-        </Reveal>
+        {/* 5. Smooth Ocean-Wave Divider Transition */}
+        <WaveDivider />
 
-        {/* 8. Private Atelier Appointment Consultation Banner */}
+        {/* 6. Consolidated Why VELA & Craftsmanship Section with Telegram Consultation CTA */}
         <Reveal>
-          <BespokeBanner onOpenCart={() => setIsCartOpen(true)} />
+          <WhyVela />
         </Reveal>
 
       </main>
 
-      {/* 9. Minimalist Boutique Footer */}
+      {/* 7. Minimalist Boutique Footer */}
       <Footer onSelectCategory={handleCategorySelect} />
 
-      {/* Floating Back to Top Button */}
+      {/* Floating Back to Top Button (Moved to Right Side in RTL) */}
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 left-6 z-30 w-9 h-9 rounded-full bg-[#2A2421] text-[#FAF6F0] flex items-center justify-center shadow-lg border border-[#E8DFD5]/40 hover:bg-[#140F0D] transition-all duration-200 active:scale-95 cursor-pointer skip-delay"
+          className="fixed bottom-6 right-6 sm:right-8 z-30 w-10 h-10 rounded-full bg-[#FAF6F0] dark:bg-[#181411] text-[#8C6D46] dark:text-[#C5A880] hover:bg-[#8C6D46] hover:text-white dark:hover:bg-[#C5A880] dark:hover:text-[#120E0C] border border-[#DDD3C6] dark:border-white/15 flex items-center justify-center shadow-2xl transition-all duration-200 active:scale-95 cursor-pointer skip-delay"
           title="بازگشت به ابتدای صفحه"
           aria-label="بازگشت به بالا"
         >
