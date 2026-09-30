@@ -8,6 +8,7 @@ import { SectionHeader } from './components/SectionHeader';
 import { CategoryFilterBar } from './components/CategoryFilterBar';
 import { ProductCard } from './components/ProductCard';
 import { ProductSkeleton } from './components/ProductSkeleton';
+import { SectionDivider } from './components/SectionDivider';
 import { WaveDivider } from './components/WaveDivider';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
@@ -45,25 +46,23 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Cart state with localStorage persistence
+  // Cart state with localStorage persistence (starts strictly empty from zero)
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem('vela_cart');
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Clean out legacy hardcoded item if present from earlier sessions
+        if (Array.isArray(parsed) && (parsed.length === 0 || (parsed.length === 1 && parsed[0]?.id?.includes('vla-st-002')))) {
+          localStorage.removeItem('vela_cart');
+          return [];
+        }
+        return parsed;
       }
     } catch {
       // Fallback
     }
-    return [
-      {
-        id: 'vla-st-002-۳۸-شکلاتی پاییزی',
-        product: PRODUCTS[0],
-        size: '۳۸',
-        color: 'شکلاتی پاییزی',
-        quantity: 1,
-      },
-    ];
+    return [];
   });
 
   // Customer order form with localStorage persistence
@@ -308,23 +307,18 @@ export default function App() {
           onSelectCategory={handleCategorySelect}
         />
 
+        {/* Dynamic Section Divider with generous breathing room between Categories & Products */}
+        <SectionDivider />
+
         {/* 4. Main Catalog & Products (Directly follows Category Cards) */}
         <section id="catalog-section" className="w-full scroll-mt-[100px] sm:scroll-mt-[118px]">
           
-          {/* Section Heading with subtle divider */}
-          <div className="max-w-[1600px] mx-auto px-4 sm:px-8 pt-6">
+          {/* Centered Editorial Section Header without 'نمایش همه' button */}
+          <div className="max-w-[1360px] mx-auto px-4 sm:px-8 pt-4 pb-2">
             <SectionHeader
               englishLabel="NEW ARRIVALS • FALL/WINTER 2026"
               title="جدیدترین آثار کالکشن مزون"
               subtitle="منتخب این هفته آتلیه ولا"
-              actionText="نمایش همه"
-              onAction={() => {
-                setSelectedCategory('all');
-                setSearchQuery('');
-                handleScrollToCatalog();
-              }}
-              hasTopDivider={true}
-              hasBottomDivider={false}
               className="mb-4"
             />
           </div>
@@ -339,20 +333,20 @@ export default function App() {
             onSortChange={setSortBy}
           />
 
-          {/* Product Grid — centered rows, stagger replays on category switch */}
+          {/* Product Grid — Statuesque wide & tall cards, centered rows */}
           <div
             id="catalog-grid"
-            className="w-full max-w-[1600px] mx-auto px-4 sm:px-8 py-6 sm:py-10 scroll-mt-[230px] md:scroll-mt-[190px]"
+            className="w-full max-w-[1360px] mx-auto px-4 sm:px-8 py-6 sm:py-10 scroll-mt-[230px] md:scroll-mt-[190px]"
           >
             {isCategoryLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
-                {Array.from({ length: 4 }).map((_, i) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
+                {Array.from({ length: 3 }).map((_, i) => (
                   <ProductSkeleton key={i} />
                 ))}
               </div>
             ) : filteredProducts.length === 0 ? (
-              <div className="text-center py-14 bg-[#FAF6F0] rounded-2xl border border-[#E8DFD5] space-y-3 px-4">
-                <p className="font-display text-base sm:text-lg text-[#2A2421] font-semibold">
+              <div className="text-center py-14 bg-[#FAF6F0] dark:bg-[#1C1714] rounded-2xl border border-[#E8DFD5] dark:border-white/10 space-y-3 px-4">
+                <p className="font-display text-base sm:text-lg text-[#2A2421] dark:text-white font-semibold">
                   هیچ اثری با مشخصات انتخابی شما یافت نشد.
                 </p>
                 <button
@@ -360,7 +354,7 @@ export default function App() {
                     setSelectedCategory('all');
                     setSearchQuery('');
                   }}
-                  className="py-3 px-7 rounded-full bg-[#2A2421] text-white text-sm font-semibold cursor-pointer hover:bg-stone-800 transition shadow-xs"
+                  className="py-3 px-7 rounded-full bg-[#2A2421] dark:bg-[#C5A880] text-white dark:text-[#120E0C] text-sm font-semibold cursor-pointer hover:bg-stone-800 dark:hover:bg-[#D4B890] transition shadow-xs"
                 >
                   نمایش همه محصولات مزون
                 </button>
@@ -368,13 +362,7 @@ export default function App() {
             ) : (
               <div
                 key={selectedCategory}
-                className={`grid gap-3 sm:gap-6 justify-items-center ${
-                  filteredProducts.length <= 2
-                    ? 'grid-cols-2 max-w-2xl mx-auto'
-                    : filteredProducts.length === 3
-                    ? 'grid-cols-2 md:grid-cols-3 max-w-4xl mx-auto'
-                    : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
-                }`}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 justify-items-center"
               >
                 {filteredProducts.map((product, idx) => (
                   <ProductCard
