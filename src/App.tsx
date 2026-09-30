@@ -278,7 +278,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F0EB] text-[#2A2421] selection:bg-[#E8DFD5] selection:text-[#2A2421]">
+    <div className="min-h-screen flex flex-col bg-[#F5F0EB] dark:bg-[#120E0C] text-[#2A2421] dark:text-[#F2E9DC] selection:bg-[#E8DFD5] selection:text-[#2A2421] transition-colors duration-200">
       
       {/* 1. Header: Fixed, compact, sticky on scroll */}
       <Header
